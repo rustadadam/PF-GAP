@@ -21,7 +21,7 @@ public class ProximityForest implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -1183368028217094381L;
-	private final int r; //is this needed? number of candidates to consider.
+	//private final int r; //is this needed? number of candidates to consider.
 	protected transient ProximityForestResult result;
 	protected int forest_id;
 	protected ProximityTree trees[];
@@ -30,7 +30,7 @@ public class ProximityForest implements Serializable{
 	int[] num_votes;
 	List<Integer> max_voted_classes;
 	
-	/*public ProximityForest(int forest_id) {
+	public ProximityForest(int forest_id) {
 		this.result = new ProximityForestResult(this);
 		
 		this.forest_id = forest_id;
@@ -40,9 +40,9 @@ public class ProximityForest implements Serializable{
 			trees[i] = new ProximityTree(i, this);
 		}
 
-	}*/
-
-	public ProximityForest(int num_trees, int r) {
+	}
+	// This was used as a debugging tool:
+	/*public ProximityForest(int num_trees, int r) {
 		this.result = new ProximityForestResult(this);
 		this.r = r;
 		this.forest_id = forest_id;
@@ -52,7 +52,7 @@ public class ProximityForest implements Serializable{
 			trees[i] = new ProximityTree(i, this);
 		}
 
-	}
+	}*/
 	
 	public void train(Dataset train_data) throws Exception {
 	//public void train(ListDataset train_data) throws Exception {

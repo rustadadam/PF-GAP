@@ -1,0 +1,99 @@
+// Here we define the in-bag and out-of-bag indices for the tree (root node of the tree)
+// placed in train method of proximity tree.
+			//Dataset data2 = new ListDataset();
+			/*Dataset inbagData = new ListDataset();
+			Dataset oobData = new ListDataset();
+			if (this.node_depth==0){
+				//First we get the in-bag indices.
+				int dummySize = data.size();
+				int[]  randomIntsArray = IntStream.generate(() -> new Random().nextInt(dummySize)).limit(data.size()).toArray();
+				InBagIndices = new ArrayList<Integer>();
+				for(int i=0; i<randomIntsArray.length; i++){
+					InBagIndices.add(randomIntsArray[i]);
+				}
+				//int[] num = IntStream.range(0, data.size()).toArray();
+				int[] distinctInBag = Arrays.stream(randomIntsArray).distinct().toArray();
+				//setInBagIndices(distinctInBag);
+				//setInBagIndices(randomIntsArray);
+
+				this.multiplicities = new HashMap<Integer,Integer>();
+				//now we compute the multiplicities (number of times the indices occur in the in-bag sample)
+				for (int i=0; i<this.InBagIndices.size(); i++){
+					if (this.multiplicities.containsKey((this.InBagIndices.get(i)))){
+						this.multiplicities.put(this.InBagIndices.get(i),this.multiplicities.get(this.InBagIndices.get(i))+1);
+					}
+					else{
+						this.multiplicities.put(this.InBagIndices.get(i),1);
+					}
+				}
+
+				//now we need to get the out-of-bag indices.
+				ArrayList<Integer> result = new ArrayList<Integer>(); //out-of-bag
+				//ArrayList<Integer> resultA = (ArrayList<Integer>) InBagIndices; //new ArrayList<Integer>(); //for converting inbag
+				for (int i = 0; i < randomIntsArray.length; i++){
+					Boolean isInBag = ArrayUtils.contains(distinctInBag, i);
+					if (!isInBag){result.add(i);}
+					//else{resultA.add(i);}
+				}
+				int[] result2 = result.stream().mapToInt(i -> i).toArray();
+				OutOfBagIndices = new ArrayList<Integer>();
+				for(int i=0; i<result2.length; i++){
+					OutOfBagIndices.add(result2[i]);
+				}
+				//setOutOfBagIndices(result2);
+				data.set_indices(InBagIndices);
+
+				// Now we need to get the sub sample corresponding to the in-bag indices.
+				Dataset data2 = new ListDataset(); //data;
+				for (int index : this.InBagIndices){
+					//System.out.println(Arrays.toString(data.get_series(index)));
+					//System.out.println(data.get_index(index));
+					data2.add(data.get_class(index), data.get_series(index), index);
+
+				}
+				//data = data2; //we're only training on in-bag samples.
+				inbagData = data2;
+				// Now we need to get the sub sample corresponding to the out-of-bag indices.
+				Dataset data3 = new ListDataset();
+				for (int index : this.OutOfBagIndices){
+					//System.out.println(Arrays.toString(data.get_series(index)));
+					//System.out.println(data.get_index(index));
+					data3.add(data.get_class(index), data.get_series(index), index);
+
+				}
+				oobData = data3;
+				//System.out.println(Arrays.toString(data.get_series(0)));
+				//System.out.println(data.get_index(0));
+
+
+				//Integer[] result = s1.toArray(new Integer[s1.size()]);
+			}*/
+
+			/*Dataset data2 = new ListDataset(); //data;
+			for (int index : this.InBagIndices){
+				//System.out.println(Arrays.toString(data.get_series(index)));
+				//System.out.println(data.get_index(index));
+				data2.add(data.get_class(index), data.get_series(index), index);
+
+			}*/
+
+
+			// Now we need to get the sub sample corresponding to the out-of-bag indices.
+			/*Dataset data3 = new ListDataset();
+			System.out.println(this.OutOfBagIndices);
+			for (int index : this.OutOfBagIndices) {
+				System.out.println(index);
+				System.out.println(this.InBagIndices);
+				//System.out.println(Arrays.toString(data.get_series(index)));
+				//System.out.println(data.get_index(index));
+				data3.add(data.get_class(index), data.get_series(index), index);
+			}*/
+
+			/*Dataset[] best_splits = new Dataset[]{};
+			if(this.node_depth==0){
+				best_splits = splitter.find_best_split(inbagData);
+			}
+
+			else{
+				best_splits = splitter.find_best_split(data);
+			}*/

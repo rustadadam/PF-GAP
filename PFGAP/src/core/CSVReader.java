@@ -15,7 +15,7 @@ import util.PrintUtilities;
  * @author shifaz
  * @email ahmed.shifaz@monash.edu
  */
-
+//with how we've modified this, it should really be called a tsv reader instead of a csv reader.
 public class CSVReader {
 
     //helper function to assist memory allocation

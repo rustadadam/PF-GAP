@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+// This class was created for the sole purpose of debugging and is not needed for the application.
 public class pfgap{
 
     public static void main(String[] args) throws Exception {
@@ -26,7 +27,7 @@ public class pfgap{
         int Treenum = Integer.parseInt(treenum);
 
 
-        ProximityForest PF = new ProximityForest(Treenum, 5);
+        ProximityForest PF = new ProximityForest(Treenum);
         String train_file = System.getProperty("user.dir") + "/Data/" + dataset + "_TRAIN.csv";
         String test_file = System.getProperty("user.dir") + "/Data/" + dataset + "_TEST.csv";
         ListDataset train_data = CSVReader.readCSVToListDataset(train_file,false, true,"\t");

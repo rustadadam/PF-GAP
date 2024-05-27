@@ -15,16 +15,16 @@ import util.PrintUtilities;
 
 public class PFApplication {
 	
-	public static final String UCR_dataset = "ItalyPowerDemand";
+	public static final String UCR_dataset = "GunPoint"; //"ItalyPowerDemand";
 	//TODO test support file paths with a space?
 	public static final String[] test_args = new String[]{
-			"-train=E:/data/ucr/" + UCR_dataset + "/" + UCR_dataset + "_TRAIN.txt", 
-			"-test=E:/data/ucr/" + UCR_dataset + "/" + UCR_dataset + "_TEST.txt",
+			"-train=" + System.getProperty("user.dir") + "/Data/" + UCR_dataset + "_TRAIN.tsv", //"-train=E:/data/ucr/" + UCR_dataset + "/" + UCR_dataset + "_TRAIN.txt",
+			"-test=" + System.getProperty("user.dir") + "/Data/" + UCR_dataset + "_TEST.tsv",
 //			"-train=E:/data/satellite/sample100000_TRAIN.txt", 
 //			"-test=E:/data/satellite/sample100000_TEST.txt",
 			"-out=output",
 			"-repeats=1",
-			"-trees=100",
+			"-trees=10",
 			"-r=5",
 			"-on_tree=true",
 			"-shuffle=true",
@@ -39,7 +39,7 @@ public class PFApplication {
 		try {	
 			
 			//args = test_args;
-			
+			//Integer testint = Integer.parseInt("2 3 3.444"[0]);
 			//some default settings are specified in the AppContext class but here we
 			//override the default settings using the provided command line arguments		
 			for (int i = 0; i < args.length; i++) {
@@ -108,5 +108,7 @@ public class PFApplication {
 		}
 		
 	}
+
+
 }
 
