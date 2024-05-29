@@ -43,7 +43,7 @@ def SymmetrizeProx(Pmat):
 
 
 # Here is a function to compute within-class outliers.
-def getRawOutlierScores(proxArray, ytrain):
+def getOutlierScores(proxArray, ytrain):
     # the proxArray should be symmetrized first.
     uniqueLabels = np.unique(ytrain)
     mydict = {label:[] for label in uniqueLabels}
@@ -55,14 +55,27 @@ def getRawOutlierScores(proxArray, ytrain):
     scores = []
     for i in range(ytrain.shape[0]):
         label = ytrain[i]
-        PiList = [proxArray[i][k] for k in mydict[label]]
+        PiList = [proxArray[i][k]**2 for k in mydict[label]]
         Pn = np.sum(PiList)
         if Pn == 0:
             print("Warning: index " + str(i) + " has within-class proximity of 0. Changing to 1e-6.")
             Pn = 1e-6
         scores.extend([ytrain.shape[0]/Pn])
-    print(scores)
-    return scores
+    # now we have the raw outlier scores.
+    # now let's normalize them.
+    medians = {label:0 for label in uniqueLabels}
+    mads = {label:0 for label in uniqueLabels}
+    for uniquelabel in uniqueLabels:
+        proxes = [scores[i] for i in mydict[uniquelabel]]
+        medians[uniquelabel] = np.median(proxes)
+        mean = np.mean(proxes)
+        tosum = [np.abs(x-medians[uniquelabel]) for x in proxes] #[np.abs(x-mean) for x in proxes]
+        mads[uniquelabel] = sum(tosum)/len(tosum)
+        
+    Scores = [np.abs(scores[i]-medians[ytrain[i]])/mads[ytrain[i]] for i in range(len(scores))]
+    
+    #raw scores are scores.
+    return Scores
 
 
 
