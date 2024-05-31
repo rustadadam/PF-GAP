@@ -1,6 +1,7 @@
 package trees;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import core.AppContext;
@@ -22,7 +23,8 @@ public class ProximityForest implements Serializable{
 	 */
 	private static final long serialVersionUID = -1183368028217094381L;
 	//private final int r; //is this needed? number of candidates to consider.
-	protected transient ProximityForestResult result;
+	//protected transient ProximityForestResult result;
+	protected ProximityForestResult result;
 	protected int forest_id;
 	protected ProximityTree trees[];
 	public String prefix;
@@ -32,6 +34,7 @@ public class ProximityForest implements Serializable{
 	
 	public ProximityForest(int forest_id) {
 		this.result = new ProximityForestResult(this);
+		System.out.println(this.result);
 		
 		this.forest_id = forest_id;
 		this.trees = new ProximityTree[AppContext.num_trees];
@@ -90,9 +93,10 @@ public class ProximityForest implements Serializable{
 	//ASSUMES CLASS labels HAVE BEEN reordered to start from 0 and contiguous
 	public ProximityForestResult test(Dataset test_data) throws Exception {
 		result.startTimeTest = System.nanoTime();
-		
+		//result.Predictions = new ArrayList<>();
 		num_votes = new int[test_data.length()]; //new int[test_data._get_initial_class_labels().size()];
 		max_voted_classes = new ArrayList<Integer>();
+		//ArrayList<Integer> Predictions = new ArrayList<>();
 		
 		int predicted_class;
 		int actual_class;
@@ -101,6 +105,7 @@ public class ProximityForest implements Serializable{
 		for (int i=0; i < size; i++){
 			actual_class = test_data.get_class(i);
 			predicted_class = predict(test_data.get_series(i));
+			result.Predictions.add(predicted_class);
 			if (actual_class != predicted_class){
 				result.errors++;
 			}else{

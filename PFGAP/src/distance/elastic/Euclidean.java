@@ -1,6 +1,8 @@
 package distance.elastic;
 
-public class Euclidean {
+import java.io.Serializable;
+
+public class Euclidean implements Serializable {
 	public Euclidean() {
 
 	}	

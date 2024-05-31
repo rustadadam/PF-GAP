@@ -1,5 +1,6 @@
 package distance.elastic;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import core.contracts.Dataset;
@@ -10,7 +11,7 @@ import core.contracts.Dataset;
  * 
  */
 
-public class TWE {
+public class TWE implements Serializable {
 
 	public TWE() {
 		

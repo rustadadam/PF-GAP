@@ -1,5 +1,6 @@
 package distance.elastic;
 
+import java.io.Serializable;
 import java.util.Random;
 import core.contracts.Dataset;
 
@@ -9,7 +10,7 @@ import core.contracts.Dataset;
  * 
  */
 
-public class MSM {
+public class MSM implements Serializable {
 	
 	
 	public MSM() {

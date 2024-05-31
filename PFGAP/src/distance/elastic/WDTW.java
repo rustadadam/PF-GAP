@@ -1,5 +1,6 @@
 package distance.elastic;
 
+import java.io.Serializable;
 import java.util.Random;
 import core.contracts.Dataset;
 
@@ -9,7 +10,7 @@ import core.contracts.Dataset;
  * 
  */
 
-public class WDTW {
+public class WDTW implements Serializable {
 	
 	private static final double WEIGHT_MAX = 1;
 	private double g; // "empirical constant that controls the curvature

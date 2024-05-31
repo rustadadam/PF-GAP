@@ -1,5 +1,6 @@
 package datasets;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +19,8 @@ import core.contracts.Dataset;
  *
  */
 
-public class ListDataset implements Dataset{
+//public class ListDataset implements Dataset{
+public class ListDataset implements Dataset, Serializable {
 
 	private List<double[]> data;
 	private List<Integer> labels;

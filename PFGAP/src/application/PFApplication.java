@@ -91,6 +91,15 @@ public class PFApplication {
 				case "-verbosity":
 					AppContext.verbosity =  Integer.parseInt(options[1]);
 					break;
+				case "-getprox":
+					AppContext.getprox = Boolean.parseBoolean(options[1]);
+					break;
+				case "-modelname":
+					AppContext.modelname = options[1];
+					break;
+				case "-savemodel":
+					AppContext.savemodel = Boolean.parseBoolean(options[1]);
+					break;
 				default:
 					throw new Exception("Invalid Commandline Arguments");
 				}
@@ -101,7 +110,7 @@ public class PFApplication {
 			}
 						
 			ExperimentRunner experiment = new ExperimentRunner();
-			experiment.run();
+			experiment.run(false);
 			
 		}catch(Exception e) {			
             PrintUtilities.abort(e);

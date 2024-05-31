@@ -2,6 +2,8 @@ package core;
 
 import trees.ProximityTree;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author shifaz
@@ -9,7 +11,8 @@ import trees.ProximityTree;
  *
  */
 
-public class TreeStatCollector {
+//public class TreeStatCollector {
+public class TreeStatCollector implements Serializable {
 
 	private transient ProximityTree tree;
 	

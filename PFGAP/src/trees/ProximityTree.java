@@ -1,5 +1,6 @@
 package trees;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -20,7 +21,8 @@ import java.util.stream.IntStream;
  *
  */
 
-public class ProximityTree{
+//public class Proximity Tree {
+public class ProximityTree implements Serializable {
 	protected int forest_id;	
 	private int tree_id;
 	protected Node root;
@@ -277,7 +279,8 @@ public class ProximityTree{
 	
 	
 	
-	public class Node{
+	//public class Node{
+	public class Node implements Serializable {
 	
 		protected ArrayList<Integer> InBagIndices; //int[] InBagIndices;
 		protected ArrayList<Integer> OutOfBagIndices; //ArrayList<Integer> OutOfBagIndices;

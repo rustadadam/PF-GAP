@@ -1,8 +1,8 @@
 import subprocess
 import numpy as np
 
-def getProx(trainfile, testfile, out="output", repeats=1, num_trees=10, r=5, on_tree="true", shuffle="true", export=1, verbosity=1, csv_has_header="false", target_column="first"):
-    msgList = ['java', '-jar', '-Xmx1g', 'PFGAPjava.jar']
+def getProx(trainfile, testfile, getprox="true", savemodel="true", modelname="PF", out="output", repeats=1, num_trees=10, r=5, on_tree="true", shuffle="false", export=1, verbosity=1, csv_has_header="false", target_column="first"):
+    msgList = ['java', '-jar', '-Xmx1g', 'PFGAP.jar']
     # Mostly, trainfile, testfile, num_trees, and r are what will be tampered with.
     msgList.extend(["-train=" + trainfile])
     msgList.extend(["-test=" + testfile])
@@ -16,6 +16,27 @@ def getProx(trainfile, testfile, out="output", repeats=1, num_trees=10, r=5, on_
     msgList.extend(["-verbosity=" + str(verbosity)])
     msgList.extend(["-csv_has_header=" + csv_has_header]) # we mean this to work primarily with tsv files, actually.
     msgList.extend(["-target_column=" + target_column])
+    msgList.extend(["-getprox=" + getprox])
+    msgList.extend(["-savemodel=" + savemodel])
+    msgList.extend(["-modelname=" + modelname])
+    
+
+    subprocess.call(msgList)
+    return
+    
+
+def evalPF(testfile, modelname="PF", out="output", shuffle="false", export=1, verbosity=1, csv_has_header="false", target_column="first"):
+    msgList = ['java', '-jar', '-Xmx1g', 'PFGAP_eval.jar']
+    # Mostly, trainfile, testfile, num_trees, and r are what will be tampered with.
+    msgList.extend(["-train=" + testfile])
+    msgList.extend(["-test=" + testfile])
+    msgList.extend(["-out=" + out])
+    msgList.extend(["-shuffle=" + shuffle])
+    msgList.extend(["-export=" + str(export)])
+    msgList.extend(["-verbosity=" + str(verbosity)])
+    msgList.extend(["-csv_has_header=" + csv_has_header]) # we mean this to work primarily with tsv files, actually.
+    msgList.extend(["-target_column=" + target_column])
+    msgList.extend(["-modelname=" + modelname])
 
     subprocess.call(msgList)
     return

@@ -1,11 +1,9 @@
 package core;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
@@ -23,9 +21,12 @@ import util.Statistics;
  *
  */
 
-public class ProximityForestResult {
-	
-	private transient ProximityForest forest;
+//public class ProximityForestResult {
+public class ProximityForestResult implements Serializable {
+
+    public ArrayList<Object> Predictions;
+    //private transient ProximityForest forest;
+	private ProximityForest forest;
 	public boolean results_collated = false;
 	
 	//FILLED BY FOREST CLASS
@@ -99,6 +100,7 @@ public class ProximityForestResult {
 	public ProximityForestResult(ProximityForest forest) {
 		this.forest_id = forest.getForestID();
 		this.forest = forest;
+		this.Predictions = new ArrayList<>();
 	}
 	
 	public void collateResults() {

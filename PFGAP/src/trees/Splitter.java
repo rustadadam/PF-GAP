@@ -1,5 +1,6 @@
 package trees;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import core.AppContext;
@@ -13,8 +14,8 @@ import distance.elastic.DistanceMeasure;
  * @email ahmed.shifaz@monash.edu
  *
  */
-
-public class Splitter{
+// public class Splitter{
+public class Splitter implements Serializable {
 	
 	protected int num_children; //may be move to splitter?
 	protected DistanceMeasure distance_measure;

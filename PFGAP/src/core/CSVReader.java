@@ -1,11 +1,6 @@
 package core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
+import java.io.*;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import datasets.ListDataset;
@@ -52,6 +47,7 @@ public class CSVReader {
     }
 
 
+    //public static ListDataset readCSVToListDataset(String fileName, boolean hasHeader, boolean targetColumnIsFirst, String separator) {
     public static ListDataset readCSVToListDataset(String fileName, boolean hasHeader, boolean targetColumnIsFirst, String separator) {
         String line = "";
         int i = 0;
@@ -130,6 +126,7 @@ public class CSVReader {
             PrintUtilities.abort(e);
         }
         return dataset;
+        //return (Serializable) dataset;
     }
 
 }

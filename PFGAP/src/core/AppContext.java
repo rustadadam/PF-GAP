@@ -68,9 +68,12 @@ public class AppContext {
 			MEASURE.msm	
 	};	
 
-	public static Runtime runtime = Runtime.getRuntime();	
-	
-	private static transient Dataset train_data;
+	public static Runtime runtime = Runtime.getRuntime();
+    public static boolean savemodel;
+	public static boolean getprox;
+	public static String modelname;
+
+    private static transient Dataset train_data;
 	private static transient Dataset test_data;
 	private static String datasetName; 
 	

@@ -1,7 +1,9 @@
 package core;
 
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 import datasets.ListDataset;
 import org.apache.commons.lang3.ArrayUtils;
@@ -28,15 +30,22 @@ public class ExperimentRunner {
 
 	}
 
-	public void run() throws Exception {
+	public void run(boolean eval) throws Exception {
 		//read data files
 		//we assume no header in the csv files, and that class label is in the first column, modify if necessary
-		ListDataset train_data_original =
-				CSVReader.readCSVToListDataset(AppContext.training_file, AppContext.csv_has_header,
-						AppContext.target_column_is_first, csvSeparatpr);
+		ListDataset train_data_original;
 		ListDataset test_data_original =
 				CSVReader.readCSVToListDataset(AppContext.testing_file, AppContext.csv_has_header,
 						AppContext.target_column_is_first, csvSeparatpr);
+		if(!eval) {
+			train_data_original =
+					CSVReader.readCSVToListDataset(AppContext.training_file, AppContext.csv_has_header,
+							AppContext.target_column_is_first, csvSeparatpr);
+		}
+		else{
+			train_data_original = test_data_original;
+		}
+
 
 
 		/**
@@ -66,7 +75,9 @@ public class ExperimentRunner {
 		String datasetName = training_file.getName().replaceAll("_TRAIN.txt", "");	//this is just some quick fix for UCR datasets
 		AppContext.setDatasetName(datasetName);
 
-		PrintUtilities.printConfiguration();
+		if(!eval) {
+			PrintUtilities.printConfiguration();
+		}
 
 		System.out.println();
 
@@ -79,56 +90,95 @@ public class ExperimentRunner {
 
 		for (int i = 0; i < AppContext.num_repeats; i++) {
 
-			if (AppContext.verbosity > 0) {
-				System.out.println("-----------------Repetition No: " + (i+1) + " (" +datasetName+ ") " +"  -----------------");
-				PrintUtilities.printMemoryUsage();
-			}else if (AppContext.verbosity == 0 && i == 0){
-				System.out.println("Repetition, Dataset, Accuracy, TrainingTime(ms), TestingTime(ms), MeanDepthPerTree");
-			}
-
-			//create model
-			ProximityForest forest = new ProximityForest(i);
-
-			//train model
-			forest.train(train_data);
-
-			//test model
-			ProximityForestResult result = forest.test(test_data);
-
-			//Calculate array of forest proximities.
-			System.out.println("Computing Forest Proximities...");
-			double t5 = System.currentTimeMillis();
-			Double[][] PFGAP = new Double[train_data.size()][train_data.size()];
-			for (Integer k=0; k< train_data.size(); k++){
-				for (Integer j=0; j< train_data.size(); j++){
-					Double prox = ForestProximity(k,j,forest);
-					PFGAP[k][j] = prox;
+			if(!eval) {
+				if (AppContext.verbosity > 0) {
+					System.out.println("-----------------Repetition No: " + (i + 1) + " (" + datasetName + ") " + "  -----------------");
+					PrintUtilities.printMemoryUsage();
+				}else if (AppContext.verbosity == 0 && i == 0) {
+					System.out.println("Repetition, Dataset, Accuracy, TrainingTime(ms), TestingTime(ms), MeanDepthPerTree");
 				}
-			}
-			double t6 = System.currentTimeMillis();
-			System.out.print("Done Computing Forest Proximities. ");
-			System.out.print("Computation time: ");
-			System.out.println(t6-t5 + "ms");
 
-			//print and export resultS
-			result.printResults(datasetName, i, "");
+			//if(!eval) {
+				//create model
+				ProximityForest forest = new ProximityForest(i);
 
-			//export level is integer because I intend to add few levels in future, each level with a higher verbosity
-			if (AppContext.export_level > 0) {
-				result.exportJSON(datasetName, i);
-			}
+				//train model
+				forest.train(train_data);
 
-			//Now we print the PFGAP array to a text file.
-			PrintWriter writer = new PrintWriter("ForestProximities.txt", "UTF-8");
-			writer.print(ArrayUtils.toString(PFGAP));
-			writer.close();
-			Integer[] ytrain = new Integer[train_data.size()];
-			for(Integer k=0; k< train_data.size(); k++){
-				ytrain[k] = train_data.get_class(k);
+				if(AppContext.savemodel) {
+					// save the trained model
+					try {
+						FileOutputStream fileOutputStream = new FileOutputStream(AppContext.modelname + ".ser");
+						ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+						objectOutputStream.writeObject(forest);
+						objectOutputStream.close();
+					} catch (IOException e) {
+						//	e.printStackTrace
+					}
+				}
+
+				//test model
+				ProximityForestResult result = forest.test(test_data);
+
+				//Now we print the Predictions array to a text file.
+				PrintWriter writer0 = new PrintWriter("Predictions.txt", "UTF-8");
+				writer0.print(ArrayUtils.toString(result.Predictions));
+				writer0.close();
+
+				if(AppContext.getprox) {
+					//Calculate array of forest proximities.
+					System.out.println("Computing Forest Proximities...");
+					double t5 = System.currentTimeMillis();
+					Double[][] PFGAP = new Double[train_data.size()][train_data.size()];
+					for (Integer k = 0; k < train_data.size(); k++) {
+						for (Integer j = 0; j < train_data.size(); j++) {
+							Double prox = ForestProximity(k, j, forest);
+							PFGAP[k][j] = prox;
+						}
+					}
+					double t6 = System.currentTimeMillis();
+					System.out.print("Done Computing Forest Proximities. ");
+					System.out.print("Computation time: ");
+					System.out.println(t6 - t5 + "ms");
+
+
+					//Now we print the PFGAP array to a text file.
+					PrintWriter writer = new PrintWriter("ForestProximities.txt", "UTF-8");
+					writer.print(ArrayUtils.toString(PFGAP));
+					writer.close();
+					Integer[] ytrain = new Integer[train_data.size()];
+					for (Integer k = 0; k < train_data.size(); k++) {
+						ytrain[k] = train_data.get_class(k);
+					}
+					PrintWriter writer2 = new PrintWriter("ytrain.txt", "UTF-8");
+					writer2.print(ArrayUtils.toString(ytrain));
+					writer2.close();
+				}
+				//print and export resultS
+				result.printResults(datasetName, i, "");
+
+				//export level is integer because I intend to add few levels in future, each level with a higher verbosity
+				/*if (AppContext.export_level > 0) {
+					result.exportJSON(datasetName, i);
+				}*/
 			}
-			PrintWriter writer2 = new PrintWriter("ytrain.txt", "UTF-8");
-			writer2.print(ArrayUtils.toString(ytrain));
-			writer2.close();
+			else{
+				//evaluate saved model??
+				ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("PF.ser"));
+				ProximityForest forest1 = (ProximityForest) objectInputStream.readObject();
+				//forest1.predict(test_data);
+			/*ArrayList<Integer> Predictions_saved = new ArrayList<>();
+			for (int k=0; k < test_data.size(); k++){
+				Predictions_saved.add(forest1.predict(test_data.get_series(k)));
+			}*/
+				ProximityForestResult result1 = forest1.test(test_data);
+				//Now we print the Predictions array of the saved model to a text file.
+				PrintWriter writer0a = new PrintWriter("Predictions_saved.txt", "UTF-8");
+				//writer0a.print(ArrayUtils.toString(Predictions_saved));
+				writer0a.print(ArrayUtils.toString(result1.Predictions));
+				writer0a.close();
+
+			}
 
 			if (AppContext.garbage_collect_after_each_repetition) {
 				System.gc();

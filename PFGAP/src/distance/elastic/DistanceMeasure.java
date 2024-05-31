@@ -1,5 +1,6 @@
 package distance.elastic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,11 +8,12 @@ import java.util.Random;
 import core.AppContext;
 import core.contracts.Dataset;
  
-public class DistanceMeasure {
+//public class DistanceMeasure {
+public class DistanceMeasure implements Serializable {
 	
 	public final MEASURE distance_measure;
 
-	private transient Euclidean euc;
+	/*private transient Euclidean euc;
 	private transient DTW dtw;
 	private transient DTW dtwcv;	
 	private transient DDTW ddtw;
@@ -21,7 +23,19 @@ public class DistanceMeasure {
 	private transient LCSS lcss;
 	private transient MSM msm;
 	private transient ERP erp;
-	private transient TWE twe;
+	private transient TWE twe;*/
+
+	private Euclidean euc;
+	private DTW dtw;
+	private DTW dtwcv;
+	private DDTW ddtw;
+	private DDTW ddtwcv;
+	private WDTW wdtw;
+	private WDDTW wddtw;
+	private LCSS lcss;
+	private MSM msm;
+	private ERP erp;
+	private TWE twe;
 	
 	public int windowSizeDTW =-1,
 			windowSizeDDTW=-1, 

@@ -1,6 +1,8 @@
 package distance.elastic;
 
 import static distance.elastic.DistanceTools.sim;
+
+import java.io.Serializable;
 import java.util.Random;
 import core.contracts.Dataset;
 
@@ -10,7 +12,7 @@ import core.contracts.Dataset;
  * 
  */
 
-public class LCSS {
+public class LCSS implements Serializable {
 	
 	public LCSS() {
 		
