@@ -141,7 +141,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 if they would result in any single class carrying a negative weight in either child node.
 
             static : array-like of shape (n_samples, n_static_features)
-                Static data to be added to the training data.
+                Static data to be added to the training data
 
             Returns
             -------
@@ -149,12 +149,11 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 Fitted estimator.
 
             """
-            X = self._transformer.fit_transform(X0, y)
+            super().fit(X0, y) #, sample_weight) #Fits QUANT MODEL
+            X = self._transformer.fit_transform(X0, y) # This is the transformer
 
             #TODO: Add static data to X
-            X = np.hstack([X, static])
-
-            super().fit(X, y, sample_weight) #, sample_weight)
+            X = np.hstack([X, static]) # This adds the static Data
 
             self.leaf_matrix = self._estimator.apply(X)
 
