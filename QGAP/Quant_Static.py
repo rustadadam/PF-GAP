@@ -65,6 +65,9 @@ class StaticQuantClassifier():
 
         self._estimator.fit(X_t, y)
 
+        #Create Proximities
+        self.proximites = self._estimator.apply(X_t)
+
         return self
 
     def predict(self, X, static = None):
@@ -80,10 +83,32 @@ class StaticQuantClassifier():
         y : array-like of shape (n_cases)
             Predicted class labels.
         """
+        X = self._transformer.transform(X)
+
         if static is not None:
             X = np.hstack((X, static))
 
-        return self._estimator.predict(self._transformer.transform(X))
+        return self._estimator.predict(X)
+    
+    def predict_proximities(self, X, static = None):
+        """Predicts labels for sequences in X.
+
+        Parameters
+        ----------
+        X : 3D np.array of shape (n_cases, n_channels, n_timepoints)
+            The testing data.
+
+        Returns
+        -------
+        y : array-like of shape (n_cases)
+            Predicted class labels.
+        """
+        X = self._transformer.transform(X)
+
+        if static is not None:
+            X = np.hstack((X, static))
+
+        return self._estimator.apply(X)
 
     def predict_proba(self, X, static = None):
         """Predicts labels probabilities for sequences in X.
@@ -98,15 +123,17 @@ class StaticQuantClassifier():
         y : array-like of shape (n_cases, n_classes_)
             Predicted probabilities using the ordering in classes_.
         """
+        X = self._transformer.transform(X)
+
         if static is not None:
             X = np.hstack((X, static))
 
         m = getattr(self._estimator, "predict_proba", None)
         if callable(m):
-            return self._estimator.predict_proba(self._transformer.transform(X))
+            return self._estimator.predict_proba(X)
         else:
             dists = np.zeros((X.shape[0], self.n_classes_))
-            preds = self._estimator.predict(self._transformer.transform(X))
+            preds = self._estimator.predict(X)
             for i in range(0, X.shape[0]):
                 dists[i, self._class_dictionary[preds[i]]] = 1
             return dists
