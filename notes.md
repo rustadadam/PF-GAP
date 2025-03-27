@@ -12,4 +12,6 @@ https://statrm.byu.edu/frontend/build
 
 
 # Changes and Updates
-1. Built out the static variables
+1. Built out the static variables for basic Quant
+2. Built out the pipeline to handle basic Quant
+3. Adjusted QGAP to handle static variables
