@@ -120,7 +120,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
         
         
         
-        def fit(self, X0, y, sample_weight = None, x_test = None):
+        def fit(self, X0, y, sample_weight = None, x_test = None, static = None):
 
             """Fits the random forest and generates necessary pieces to fit proximities
 
@@ -140,14 +140,22 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 for a split in each node. In the case of classification, splits are also ignored 
                 if they would result in any single class carrying a negative weight in either child node.
 
+            static : array-like of shape (n_samples, n_static_features)
+                Static data to be added to the training data.
+
             Returns
             -------
             self : object
                 Fitted estimator.
 
             """
-            super().fit(X0, y) #, sample_weight)
             X = self._transformer.fit_transform(X0, y)
+
+            #TODO: Add static data to X
+            X = np.hstack([X, static])
+
+            super().fit(X, y, sample_weight) #, sample_weight)
+
             self.leaf_matrix = self._estimator.apply(X)
 
             
