@@ -149,10 +149,12 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 Fitted estimator.
 
             """
+            super().fit(X0, y) #To get the transformer and estimator
             X = self._transformer.fit_transform(X0, y) # This is the transformer
 
             #Add static data to X
-            X = np.hstack([X, static]) 
+            if static is not None:
+                X = np.hstack([X, static]) 
 
             #Train the super estimator
             self._estimator.fit(X, y)
