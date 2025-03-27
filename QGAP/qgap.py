@@ -149,14 +149,15 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 Fitted estimator.
 
             """
-            super().fit(X0, y) #, sample_weight) #Fits QUANT MODEL
             X = self._transformer.fit_transform(X0, y) # This is the transformer
 
-            #TODO: Add static data to X
-            X = np.hstack([X, static]) # This adds the static Data
+            #Add static data to X
+            X = np.hstack([X, static]) 
+
+            #Train the super estimator
+            self._estimator.fit(X, y)
 
             self.leaf_matrix = self._estimator.apply(X)
-
             
             if x_test is not None:
                 n_test = np.shape(x_test)[0]
@@ -208,8 +209,6 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
 
             return oob_samples
 
-
-
         def get_oob_indices(self, data):
             
             """This generates a matrix of out-of-bag samples for each decision tree in the forest
@@ -252,7 +251,6 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 in_bag_sample = _generate_sample_indices(tree.random_state, n, n)
                 in_bag_samples.append(in_bag_sample)
             return in_bag_samples
-
 
         def get_in_bag_counts(self, data):
             
@@ -386,8 +384,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 data = prox_vec[cols]
 
             return data.tolist(), rows.tolist(), cols.tolist()
-        
-        
+                
         def get_proximities(self):
             
             """This method produces a proximity matrix for the random forest object.
@@ -434,7 +431,6 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
             
             else:
                 return prox_sparse
-
 
         def prox_extend(self, data):
             """Method to compute proximities between the original training 
@@ -531,7 +527,6 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
             else:
                 return prox_sparse
             
-
         def prox_predict(self, y):
             
             # TODO: need to compute proximities for new points, test points added
@@ -550,6 +545,5 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 prox_preds = prox @ y
                 self.prox_predict_score = sklearn.metrics.mean_squared_error(y, prox_preds)
                 return prox_preds
-
 
     return QGAP(prox_method = prox_method, matrix_type = matrix_type, triangular = triangular, **kwargs)
