@@ -1,5 +1,6 @@
 import subprocess
 import numpy as np
+import os
 
 def getProx(trainfile, testfile, getprox="true", savemodel="true", modelname="PF", out="output", repeats=1, num_trees=10, r=5, on_tree="true", shuffle="false", export=1, verbosity=1, csv_has_header="false", target_column="first"):
     msgList = ['java', '-jar', '-Xmx1g', 'PFGAP.jar']
@@ -55,6 +56,11 @@ def getProxArrays(proxfile="ForestProximities.txt", yfile="ytrain.txt"):
     f2 = f2.replace("{", "[")
     f2 = f2.replace("}", "]")
     yArr = eval("np.array(" + f2 + ")")
+
+    # Delete the files after reading them
+    os.remove(proxfile)
+    os.remove(yfile)
+
     return proxArr, yArr
 
 
@@ -100,10 +106,11 @@ def getOutlierScores(proxArray, ytrain):
 
 
 
+
 # example use:
-'''mytrain = "/home/ben/Documents/classes/CS7675/Project/UCRArchive_2018/ArrowHead/ArrowHead_TRAIN.tsv"
-mytest = "/home/ben/Documents/classes/CS7675/Project/UCRArchive_2018/ArrowHead/ArrowHead_TEST.tsv"
-getProx(mytrain, mytest, num_trees=18, r=5)
-prox,labels = getProxArrays()
-prox = SymmetrizeProx(prox)
-getRawOutlierScores(prox,labels)'''
+# mytrain = "/home/ben/Documents/classes/CS7675/Project/UCRArchive_2018/ArrowHead/ArrowHead_TRAIN.tsv"
+# mytest = "/home/ben/Documents/classes/CS7675/Project/UCRArchive_2018/ArrowHead/ArrowHead_TEST.tsv"
+# getProx(mytrain, mytest, num_trees=18, r=5)
+# prox,labels = getProxArrays()
+# prox = SymmetrizeProx(prox)
+# getRawOutlierScores(prox,labels)
