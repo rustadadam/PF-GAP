@@ -66,7 +66,7 @@ class StaticQuantClassifier():
         self._estimator.fit(X_t, y)
 
         #Create Proximities
-        self.proximites = self._estimator.apply(X_t)
+        self.proximities = self._estimator.apply(X_t)
 
         return self
 
