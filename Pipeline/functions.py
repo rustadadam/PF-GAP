@@ -7,8 +7,18 @@ def data_to_proximities(model, Xtrain, ytrain, Xtest, Xstatic_train = None, Xsta
     model = fit_model(model, Xtrain, ytrain, Xstatic_train)
     
     #Get proximities
-    proximites = model.predict_proximities(Xtest, static = Xstatic_test) #NOTE: May want to abstract this away later
+    proximites = get_proximities(model) # Does this need test data instead: Xtest, Xstatic_test?
 
+    return proximites
+
+def get_proximities(model):
+
+    # Static Quant has proximites as an attribute
+    if hasattr(model, "proximities"):
+        return model.proximities
+    
+    #Get proximities -> Maybe make a switch case thing here
+    proximites = model.get_proximities() #Xtest, static = Xstatic_test 
     return proximites
 
 def fit_model(model, Xtrain, ytrain, Xstatic_train = None):
