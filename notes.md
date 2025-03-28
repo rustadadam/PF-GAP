@@ -15,3 +15,4 @@ https://statrm.byu.edu/frontend/build
 1. Built out the static variables for basic Quant
 2. Built out the pipeline to handle basic Quant
 3. Adjusted QGAP to handle static variables
+4. Built Pipeline to handle both Quant models and return proximities
