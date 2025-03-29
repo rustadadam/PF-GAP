@@ -9,6 +9,7 @@ https://statrm.byu.edu/frontend/build
     b. It needs to output the RF proximities in a numpy array. (This assumes the estimator to be a random forest) 
 2. Add Static abilities to QUANT. 
 3. Add in other methods to the pipeline one by one. 
+    a. Look at FreshPRINCE model next
 
 
 # Changes and Updates
