@@ -17,6 +17,7 @@ https://statrm.byu.edu/frontend/build
 2. Built out the pipeline to handle basic Quant
 3. Adjusted QGAP to handle static variables
 4. Built Pipeline to handle both Quant models and return proximities
+5. Developed the necessary changes to REDCOMMET. Note, it is incapable of handling multivariate data. 
 
 # Questions before out meeting
 1. Looking at the java code, to run it in python you need the data files. Is that how all of the data we will be given will look like? Sourced in files? Or should I convert the data to a file, and then clean it up. 
