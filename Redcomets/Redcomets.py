@@ -123,6 +123,22 @@ class REDCOMETS(BaseClassifier):
 
         super().__init__()
 
+    def _prepare_static(self, X):
+        static = np.asarray(self.static)
+        # If the transformed X has extra columns, pad static with two dummy columns.
+        col_diff = X.shape[0] - static.shape[0]
+        if col_diff > 0: #NOTE: test this for many different cases
+            static = np.vstack([static, np.zeros((col_diff, static.shape[1]))])
+
+        if static.shape[0] == X.shape[0]:
+            return static
+        elif static.shape[0] == 1:
+            return np.tile(static, (X.shape[0], 1))
+        else:
+            raise ValueError(
+                f"Static feature array has {static.shape[0]} rows but expected {X.shape[0]}"
+            )
+
     def _fit(self, X, y):
         """Build a REDCOMETS classifier from the training set (X, y).
 
@@ -260,7 +276,7 @@ class REDCOMETS(BaseClassifier):
             X_sfa = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
 
             if self.static is not None:
-                X_sfa = np.hstack([X_sfa, self.static])
+                X_sfa = np.hstack([X_sfa, self._prepare_static(X_sfa)])
 
             rf = RandomForestClassifier(
                 n_estimators=self.n_trees,
@@ -287,14 +303,13 @@ class REDCOMETS(BaseClassifier):
 
         sax_clfs = []
         for X_sax in self._parallel_sax(sax_transforms, X_smote):
+            if self.static is not None:
+                X_sax = np.hstack([X_sax, self._prepare_static(X_sax)])
             rf = RandomForestClassifier(
                 n_estimators=self.n_trees,
                 random_state=self.random_state,
                 n_jobs=self.n_jobs,
             )
-            # If static variables are provided, append them to the features
-            if self.static is not None:
-                X_sax = np.hstack([X_sax, self.static])
             rf.fit(X_sax, y_smote)
 
             if self.variant == 1:
@@ -427,7 +442,7 @@ class REDCOMETS(BaseClassifier):
             sfa_dics = sfa.transform(X)
             X_sfa = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
             if self.static is not None:
-                X_sfa = np.hstack([X_sfa, self.static])
+                X_sfa = np.hstack([X_sfa, self._prepare_static(X_sfa)])
             rf_pred_mat = rf.predict_proba(X_sfa)
 
             if self.variant == 2:
@@ -439,7 +454,7 @@ class REDCOMETS(BaseClassifier):
             self._parallel_sax(self.sax_transforms, X), self.sax_clfs
         ):
             if self.static is not None:
-                X_sax = np.hstack([X_sax, self.static])
+                X_sax = np.hstack([X_sax, self._prepare_static(X_sax)])
             rf_pred_mat = rf.predict_proba(X_sax)
 
             if self.variant == 2:
@@ -656,7 +671,7 @@ class REDCOMETS(BaseClassifier):
                 sfa_dics = sfa.transform(X)
                 X_trans = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
                 if self.static is not None:
-                    X_trans = np.hstack([X_trans, self.static])
+                    X_trans = np.hstack([X_trans, self._prepare_static(X_trans)])
                 prox = self._compute_rf_proximities(rf, X_trans)
                 proximities_list.append(prox)
                 weights_list.append(weight if weight is not None else 1)
@@ -667,7 +682,7 @@ class REDCOMETS(BaseClassifier):
                 X_trans = sax.fit_transform(X)
                 X_trans = np.squeeze(X_trans)
                 if self.static is not None:
-                    X_trans = np.hstack([X_trans, self.static])
+                    X_trans = np.hstack([X_trans, self._prepare_static(X_trans)])
                 prox = self._compute_rf_proximities(rf, X_trans)
                 proximities_list.append(prox)
                 weights_list.append(weight if weight is not None else 1)
