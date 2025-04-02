@@ -1,5 +1,4 @@
 
-
 #Function to convert data to proximities
 def data_to_proximities(model, Xtrain, ytrain, Xtest, Xstatic_train = None, Xstatic_test = None):
 
@@ -7,28 +6,32 @@ def data_to_proximities(model, Xtrain, ytrain, Xtest, Xstatic_train = None, Xsta
     model = fit_model(model, Xtrain, ytrain, Xstatic_train)
     
     #Get proximities
-    proximites = get_proximities(model) # Does this need test data instead: Xtest, Xstatic_test?
+    proximites = get_proximities(model, Xtrain) # Does this need test data instead: Xtest, Xstatic_test?
 
     return proximites
 
-def get_proximities(model):
+def get_proximities(model, Xtrain):
 
     # Static Quant has proximites as an attribute
     if hasattr(model, "proximities"):
         return model.proximities
     
     #Get proximities -> Maybe make a switch case thing here
-    proximites = model.get_proximities() #Xtest, static = Xstatic_test 
-    return proximites
+    elif hasattr(model, "get_proximities"): #QGAP
+        return model.get_proximities()
+    elif hasattr(model, "get_ensemble_proximities"):
+        return model.get_ensemble_proximities(Xtrain, group = "all")
+
+    raise AttributeError("Model does not have expected Methods.")
 
 def fit_model(model, Xtrain, ytrain, Xstatic_train = None):
     try:
 
         #Using Static variables
-        if Xstatic_train is not None:
-            model.fit(Xtrain, ytrain, static = Xstatic_train)
-        else:
+        if Xstatic_train is None:
             model.fit(Xtrain, ytrain)
+        else:
+            model.fit(Xtrain, ytrain, static = Xstatic_train)
 
         return model
     except Exception as e:

@@ -678,7 +678,7 @@ class REDCOMETS(BaseClassifier):
         total_weight = sum(weights_list)
         aggregated = sum(prox * w for prox, w in zip(proximities_list, weights_list)) / total_weight
         return aggregated
-
+    
     @classmethod
     def _get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the estimator.

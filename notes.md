@@ -4,10 +4,7 @@ Link to Resource Manager:
 https://statrm.byu.edu/frontend/build
 
 # Tasks
-1. Build out half of a pipeline. 
-    a. It needs to take data in, the model (like QUANT or PFGAP) and eventually static variables.
-    b. It needs to output the RF proximities in a numpy array. (This assumes the estimator to be a random forest) 
-2. Add Static abilities to QUANT. 
+...
 3. Add in other methods to the pipeline one by one. 
     a. Look at FreshPRINCE model next
 
@@ -18,6 +15,7 @@ https://statrm.byu.edu/frontend/build
 3. Adjusted QGAP to handle static variables
 4. Built Pipeline to handle both Quant models and return proximities
 5. Developed the necessary changes to REDCOMMET. Note, it is incapable of handling multivariate data. 
+    a. Allowed REDCOMET to handle static variables
 
 # Questions before out meeting
 1. Looking at the java code, to run it in python you need the data files. Is that how all of the data we will be given will look like? Sourced in files? Or should I convert the data to a file, and then clean it up. 
