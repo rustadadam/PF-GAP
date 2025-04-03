@@ -16,6 +16,7 @@ https://statrm.byu.edu/frontend/build
 2. Created the RFGAP Rocket class
     a. Created the test notebook
     b. Allowed it to compute Static variables as well
+    c. Updated Pipeline to take it in
 3. 
 
 ## Questions before out meeting

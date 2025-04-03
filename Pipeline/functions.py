@@ -18,7 +18,14 @@ def get_proximities(model, Xtrain):
     
     #Get proximities -> Maybe make a switch case thing here
     elif hasattr(model, "get_proximities"): #QGAP
-        return model.get_proximities()
+        prox = model.get_proximities()
+
+        #If the matrix is sparse, convert to dense
+        if hasattr(prox, "todense"):
+            return prox.todense()
+        else:
+            return prox
+        
     elif hasattr(model, "get_ensemble_proximities"):
         return model.get_ensemble_proximities(Xtrain, group = "all")
 
