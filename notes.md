@@ -5,8 +5,6 @@ https://statrm.byu.edu/frontend/build
 
 # Week of April 3rd
 ## Tasks 
-2. Take the normal the RF-GAP. Use it for Time Series data (we will need to apply a Multi-ROCKET transform. Works like a convulational neural network. Use a small kernal to limit the feature output)
-    a. Look at how to balance the static features (so its not drowned out by the massive amount of output features)
 3. Add in other methods to the pipeline one by one. 
     a. Look at FreshPRINCE model next
 
