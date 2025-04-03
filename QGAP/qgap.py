@@ -12,6 +12,8 @@ import sklearn
 from aeon.classification.interval_based import QUANTClassifier
 from aeon.regression.interval_based import QUANTRegressor
 from aeon.transformations.collection.interval_based import QUANTTransformer
+from aeon.base._base import _clone_estimator
+from sklearn.ensemble import ExtraTreesClassifier, ExtraTreesRegressor
 
 
 from distutils.version import LooseVersion
@@ -149,12 +151,37 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 Fitted estimator.
 
             """
-            super().fit(X0, y) #To get the transformer and estimator
+            self._transformer = QUANTTransformer(
+            interval_depth=self.interval_depth,
+            quantile_divisor=self.quantile_divisor,
+            )
+
             X = self._transformer.fit_transform(X0, y) # This is the transformer
 
             #Add static data to X
             if static is not None:
                 X = np.hstack([X, static]) 
+
+            #Determine and build the estimator
+            if self.prediction_type == 'classification':
+                rf_estimator = ExtraTreesClassifier
+            elif self.prediction_type == 'regression':
+                rf_estimator = ExtraTreesRegressor
+
+            self._estimator = _clone_estimator(
+            (
+                rf_estimator(
+                    n_estimators=200,
+                    max_features=0.1,
+                    criterion="entropy",
+                    class_weight=self.class_weight,
+                    random_state=self.random_state,
+                )
+                if self.estimator is None
+                else self.estimator
+            ),
+            self.random_state,
+        )
 
             #Train the super estimator
             self._estimator.fit(X, y)
@@ -166,8 +193,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 
                 self.leaf_matrix_test = self.apply(x_test)
                 self.leaf_matrix = np.concatenate((self.leaf_matrix, self.leaf_matrix_test), axis = 0)
-            
-                        
+                                 
             if self.prox_method == 'oob':
                 self.oob_indices = self.get_oob_indices(X)
                 
@@ -191,6 +217,8 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 self.in_bag_leaves = self.in_bag_indices * self.leaf_matrix
                 self.oob_leaves = self.oob_indices * self.leaf_matrix
             
+            #Run at the end
+            self.is_fitted = True
 
         
         def _get_oob_samples(self, data):
