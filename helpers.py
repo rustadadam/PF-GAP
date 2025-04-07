@@ -1,5 +1,168 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.utils.validation import check_is_fitted
+
+
+class ProximityMixin:
+
+    def prox_fit(self, X, x_test = None):
+        self.leaf_matrix = self._estimator.apply(X)
+            
+        if x_test is not None:
+            n_test = np.shape(x_test)[0]
+            
+            self.leaf_matrix_test = self.apply(x_test)
+            self.leaf_matrix = np.concatenate((self.leaf_matrix, self.leaf_matrix_test), axis = 0)
+                                
+        if self.prox_method == 'oob':
+            self.oob_indices = self.get_oob_indices(X)
+            
+            if x_test is not None:
+                self.oob_indices = np.concatenate((self.oob_indices, np.ones((n_test, self.n_estimators))))
+            
+            self.oob_leaves = self.oob_indices * self.leaf_matrix
+
+        if self.prox_method == 'rfgap':
+
+            self.oob_indices = self.get_oob_indices(X)
+            self.in_bag_counts = self.get_in_bag_counts(X)
+
+            
+            if x_test is not None:
+                self.oob_indices = np.concatenate((self.oob_indices, np.ones((n_test, self.n_estimators))))
+                self.in_bag_counts = np.concatenate((self.in_bag_counts, np.zeros((n_test, self.n_estimators))))                
+                            
+            self.in_bag_indices = 1 - self.oob_indices
+
+            self.in_bag_leaves = self.in_bag_indices * self.leaf_matrix
+            self.oob_leaves = self.oob_indices * self.leaf_matrix
+        
+    def get_proximity_vector(self, ind):
+        #Implement Checks:
+        if self.prox_method not in ['oob', 'original', 'rfgap']:
+            raise ValueError("Invalid proximity method. Choose 'oob', 'original', or 'rfgap'.")
+
+        n, num_trees = self.leaf_matrix.shape
+        
+        prox_vec = np.zeros((1, n))
+        if self.prox_method == 'oob':
+            if self.triangular:
+                ind_oob_leaves = np.nonzero(self.oob_leaves[ind, :])[0]
+                tree_counts = np.sum(
+                    self.oob_indices[ind, ind_oob_leaves] ==
+                    self.oob_indices[ind:, ind_oob_leaves], axis=1
+                )
+                tree_counts[tree_counts == 0] = 1
+                prox_counts = np.sum(
+                    self.oob_leaves[ind, ind_oob_leaves] ==
+                    self.oob_leaves[ind:, ind_oob_leaves], axis=1
+                )
+                prox_vec = np.divide(prox_counts, tree_counts)
+                cols = np.where(prox_vec != 0)[0] + ind
+                rows = np.ones(len(cols), dtype=int) * ind
+                data = prox_vec[cols - ind]
+            else:
+                ind_oob_leaves = np.nonzero(self.oob_leaves[ind, :])[0]
+                tree_counts = np.sum(
+                    self.oob_indices[ind, ind_oob_leaves] ==
+                    self.oob_indices[:, ind_oob_leaves], axis=1
+                )
+                tree_counts[tree_counts == 0] = 1
+                prox_counts = np.sum(
+                    self.oob_leaves[ind, ind_oob_leaves] ==
+                    self.oob_leaves[:, ind_oob_leaves], axis=1
+                )
+                prox_vec = np.divide(prox_counts, tree_counts)
+                cols = np.nonzero(prox_vec)[0]
+                rows = np.ones(len(cols), dtype=int) * ind
+                data = prox_vec[cols]
+
+        elif self.prox_method == 'original':
+            if self.triangular:
+                tree_inds = self.leaf_matrix[ind, :]
+                prox_vec = np.sum(tree_inds == self.leaf_matrix[ind:, :], axis=1)
+                cols = np.where(prox_vec != 0)[0] + ind
+                rows = np.ones(len(cols), dtype=int) * ind
+                data = prox_vec[cols - ind] / num_trees
+            else:
+                tree_inds = self.leaf_matrix[ind, :]
+                prox_vec = np.sum(tree_inds == self.leaf_matrix, axis=1)
+                cols = np.nonzero(prox_vec)[0]
+                rows = np.ones(len(cols), dtype=int) * ind
+                data = prox_vec[cols] / num_trees
+
+        elif self.prox_method == 'rfgap':
+            oob_trees = np.nonzero(self.oob_indices[ind, :])[0]
+            in_bag_trees = np.nonzero(self.in_bag_indices[ind, :])[0]
+            terminals = self.leaf_matrix[ind, :]
+            matches = terminals == self.in_bag_leaves 
+            match_counts = np.where(matches, self.in_bag_counts, 0)
+            ks = np.sum(match_counts, axis=0)
+            ks[ks == 0] = 1
+            ks_in = ks[in_bag_trees]
+            ks_out = ks[oob_trees]
+            S_out = np.count_nonzero(self.oob_indices[ind, :])
+            prox_vec = np.sum(
+                np.divide(match_counts[:, oob_trees], ks_out), axis=1
+            ) / S_out
+
+            if self.non_zero_diagonal:
+                S_in = np.count_nonzero(self.in_bag_indices[ind, :])
+                if S_in > 0:
+                    prox_vec[ind] = np.sum(
+                        np.divide(match_counts[ind, in_bag_trees], ks_in)
+                    ) / S_in
+                else:
+                    prox_vec[ind] = np.sum(
+                        np.divide(match_counts[ind, in_bag_trees], ks_in)
+                    )
+                prox_vec = prox_vec / np.max(prox_vec)
+                prox_vec[ind] = 1
+
+            cols = np.nonzero(prox_vec)[0]
+            rows = np.ones(len(cols), dtype=int) * ind
+            data = prox_vec[cols]
+
+        return data.tolist(), rows.tolist(), cols.tolist()
+
+
+    def get_proximities(self):
+        from scipy import sparse
+
+        check_is_fitted(self)
+        n, _ = self.leaf_matrix.shape
+
+        prox_vals, rows, cols = self.get_proximity_vector(0)
+        for i in range(1, n):
+            if self._estimator.verbose and i % 100 == 0:
+                print('Finished with {} rows'.format(i))
+            prox_val_temp, rows_temp, cols_temp = self.get_proximity_vector(i)
+            prox_vals.extend(prox_val_temp)
+            rows.extend(rows_temp)
+            cols.extend(cols_temp)
+
+        if self.triangular and self.prox_method != 'rfgap':
+            prox_sparse = sparse.csr_matrix(
+                (
+                    np.array(prox_vals + prox_vals),
+                    (np.array(rows + cols), np.array(cols + rows))
+                ),
+                shape=(n, n)
+            )
+            prox_sparse.setdiag(1)
+        else:
+            prox_sparse = sparse.csr_matrix(
+                (np.array(prox_vals), (np.array(rows), np.array(cols))),
+                shape=(n, n)
+            )
+
+        if self.force_symmetric:
+            prox_sparse = (prox_sparse + prox_sparse.transpose()) / 2
+
+        if self.matrix_type == 'dense':
+            return np.array(prox_sparse.todense())
+        else:
+            return prox_sparse
 
 def plot_random_time_series(data, indices=None, n=1):
     """
