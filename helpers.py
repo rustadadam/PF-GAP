@@ -1,9 +1,108 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.utils.validation import check_is_fitted
+from distutils.version import LooseVersion
+import sklearn
+if LooseVersion(sklearn.__version__) >= LooseVersion("0.24"):
+    # In sklearn version 0.24, forest module changed to be private.
+    from sklearn.ensemble._forest import _generate_unsampled_indices
+    from sklearn.ensemble import _forest as forest
+    from sklearn.ensemble._forest import _generate_sample_indices
+else:
+    # Before sklearn version 0.24, forest was public, supporting this.
+    from sklearn.ensemble.forest import _generate_unsampled_indices # Remove underscore from _forest
+    from sklearn.ensemble.forest import _generate_sample_indices # Remove underscore from _forest
+    from sklearn.ensemble import forest
 
 
 class ProximityMixin:
+
+    def _get_oob_samples(self, data):
+        
+        """This is a helper function for get_oob_indices. 
+
+        Parameters
+        ----------
+        data : array_like (numeric) of shape (n_samples, n_features)
+
+        """
+        n = len(data)
+        oob_samples = []
+        for tree in self._estimator.estimators_:
+            # Here at each iteration we obtain out-of-bag samples for every tree.
+            oob_indices = _generate_unsampled_indices(tree.random_state, n, n)
+            oob_samples.append(oob_indices)
+
+        return oob_samples
+
+    def get_oob_indices(self, data):
+        
+        """This generates a matrix of out-of-bag samples for each decision tree in the forest
+
+        Parameters
+        ----------
+        data : array_like (numeric) of shape (n_samples, n_features)
+
+
+        Returns
+        -------
+        oob_matrix : array_like (n_samples, n_estimators) 
+
+        """
+        n = len(data)
+        num_trees = self._estimator.n_estimators
+        oob_matrix = np.zeros((n, num_trees))
+        oob_samples = self._get_oob_samples(data)
+
+        for t in range(num_trees):
+            matches = np.unique(oob_samples[t])
+            oob_matrix[matches, t] = 1
+
+        return oob_matrix.astype(int)
+
+    def _get_in_bag_samples(self, data):
+
+        """This is a helper function for get_in_bag_indices. 
+
+        Parameters
+        ----------
+        data : array_like (numeric) of shape (n_samples, n_features)
+
+        """
+
+        n = len(data)
+        in_bag_samples = []
+        for tree in self._estimator.estimators_:
+        # Here at each iteration we obtain in-bag samples for every tree.
+            in_bag_sample = _generate_sample_indices(tree.random_state, n, n)
+            in_bag_samples.append(in_bag_sample)
+        return in_bag_samples
+
+    def get_in_bag_counts(self, data):
+        
+        """This generates a matrix of in-bag samples for each decision tree in the forest
+
+        Parameters
+        ----------
+        data : array_like (numeric) of shape (n_samples, n_features)
+
+
+        Returns
+        -------
+        in_bag_matrix : array_like (n_samples, n_estimators) 
+
+        """
+        n = len(data)
+        num_trees = self._estimator.n_estimators
+        in_bag_matrix = np.zeros((n, num_trees))
+        in_bag_samples = self._get_in_bag_samples(data)
+
+        for t in range(num_trees):
+            matches, n_repeats = np.unique(in_bag_samples[t], return_counts = True)
+            in_bag_matrix[matches, t] += n_repeats
+
+
+        return in_bag_matrix
 
     def prox_fit(self, X, x_test = None):
         self.leaf_matrix = self._estimator.apply(X)
