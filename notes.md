@@ -6,7 +6,7 @@ https://statrm.byu.edu/frontend/build
 # Week of April 3rd
 ## Tasks 
 3. Add in other methods to the pipeline one by one. 
-    a. RDST
+    a. RDST pipeline implementation
     b. **DrCIFClassifier
     c. **RotationForestClassifier
 
@@ -17,8 +17,11 @@ https://statrm.byu.edu/frontend/build
     a. Created the test notebook
     b. Allowed it to compute Static variables as well
     c. Updated Pipeline to take it in
-3. Added FreshPrince
+3. Added FreshPrince (though it doesn't work)
     a. However, tsfresh seems finicky and it won't load correctly. 
+4. Added RDST
+    a. Added Static handling (for the proximities - won't predict accurately yet)
+    
 
 ## Questions before out meeting
 1. Looking at the java code, to run it in python you need the data files. Is that how all of the data we will be given will look like? Sourced in files? Or should I convert the data to a file, and then clean it up. 
