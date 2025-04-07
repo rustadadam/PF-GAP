@@ -181,7 +181,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 else self.estimator
             ),
             self.random_state,
-        )
+            )
 
             #Train the super estimator
             self._estimator.fit(X, y)
