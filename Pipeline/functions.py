@@ -1,4 +1,3 @@
-
 #Function to convert data to proximities
 def data_to_proximities(model, Xtrain, ytrain, Xtest, Xstatic_train = None, Xstatic_test = None):
 
