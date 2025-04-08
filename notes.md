@@ -6,7 +6,6 @@ https://statrm.byu.edu/frontend/build
 # Week of April 3rd
 ## Tasks 
 3. Add in other methods to the pipeline one by one. 
-    a. RDST pipeline implementation
     b. **DrCIFClassifier
     c. **RotationForestClassifier
 
@@ -20,7 +19,8 @@ https://statrm.byu.edu/frontend/build
 3. Added FreshPrince (though it doesn't work)
     a. However, tsfresh seems finicky and it won't load correctly. 
 4. Added RDST
-    a. Added Static handling (for the proximities - won't predict accurately yet)
+    a. Added Static handling (for the proximities - won't predict with static yet)
+    b. Enabled it to work in the pipeline
     
 
 ## Questions before out meeting
