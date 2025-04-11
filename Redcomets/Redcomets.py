@@ -104,7 +104,8 @@ class REDCOMETS(BaseClassifier):
         random_state=None,
         n_jobs=1,
         parallel_backend=None,
-        static=None
+        static=None, 
+        debug_mode=False
     ):
         assert variant in [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.variant = variant
@@ -120,6 +121,7 @@ class REDCOMETS(BaseClassifier):
 
         self._n_channels = None
         self.static = static
+        self.debug_mode = debug_mode
 
         super().__init__()
 
@@ -231,7 +233,12 @@ class REDCOMETS(BaseClassifier):
         min_neighbours = min(Counter(y).items(), key=lambda k: k[1])[1]
         max_neighbours = max(Counter(y).items(), key=lambda k: k[1])[1]
 
-        if min_neighbours == max_neighbours:
+        if self.debug_mode:
+            print(f"min_neighbours: {min_neighbours}")
+            print(f"max_neighbours: {max_neighbours}")
+            print("\n")
+
+        if min_neighbours == max_neighbours: #NOTE: SMOTE could add extra data depending on if we need too because of the min_neighbors requirement.
             X_smote = X
             y_smote = y
 
@@ -251,6 +258,11 @@ class REDCOMETS(BaseClassifier):
                 X_smote, y_smote = RandomOverSampler(
                     sampling_strategy="all", random_state=self.random_state
                 ).fit_resample(X, y)
+                
+        if self.debug_mode:
+            print(f"X_smote shape: {X_smote.shape}")
+            print(f"y_smote shape: {y_smote.shape}")
+            print("\n")
 
         lenses = self._get_random_lenses(X_smote, n_lenses)
         sfa_lenses = lenses[: n_lenses // 2]
@@ -262,7 +274,7 @@ class REDCOMETS(BaseClassifier):
             SFA(
                 word_length=w,
                 alphabet_size=a,
-                window_size=X_smote.shape[1],
+                window_size=X_smote.shape[1], #NOTE: SMOTE could add extra data
                 binning_method="equi-width",
                 n_jobs=self.n_jobs,
                 random_state=self.random_state,
@@ -272,8 +284,11 @@ class REDCOMETS(BaseClassifier):
 
         sfa_clfs = []
         for sfa in sfa_transforms:
-            sfa_dics = sfa.fit_transform(X_smote, y_smote)
+            sfa_dics = sfa.fit_transform(X_smote, y_smote) #NOTE: SMOTE could add extra data
             X_sfa = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
+
+            if self.debug_mode:
+                print(f"X_sfa shape: {X_sfa.shape}")
 
             if self.static is not None:
                 X_sfa = np.hstack([X_sfa, self._prepare_static(X_sfa)])
@@ -668,8 +683,8 @@ class REDCOMETS(BaseClassifier):
         if group in ("sfa", "all"):
             for (rf, weight), sfa in zip(self.sfa_clfs, self.sfa_transforms):
                 # Transform X using the SFA transform
-                sfa_dics = sfa.transform(X)
-                X_trans = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
+                sfa_dics = sfa.transform(X) # SEE what this returns
+                X_trans = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]]) #NOTE: TWO EXTRA ROWS HERE - With GunPoint 
                 if self.static is not None:
                     X_trans = np.hstack([X_trans, self._prepare_static(X_trans)])
                 prox = self._compute_rf_proximities(rf, X_trans)
@@ -690,6 +705,8 @@ class REDCOMETS(BaseClassifier):
         if not proximities_list:
             raise ValueError("No models available for group: " + group)
 
+
+        # Maybe there is a more intuitive way to do this
         total_weight = sum(weights_list)
         aggregated = sum(prox * w for prox, w in zip(proximities_list, weights_list)) / total_weight
         return aggregated
