@@ -32,6 +32,7 @@ https://statrm.byu.edu/frontend/build
 3. Figure out the Java Code. 
 
 ## Changes and Updates
-1. 
+1. Investigating Redcomets Extra Rows:
+    a. It applies the SMOTE algorithm to ensure we have a min_neighbors requirment for each point.
 
 
