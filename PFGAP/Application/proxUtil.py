@@ -1,9 +1,32 @@
 import subprocess
 import numpy as np
 import os
+import re
+
+def check_java_version(required_version=17):
+    """Check if the installed Java version meets the required version."""
+    try:
+        output = subprocess.check_output(['java', '-version'], stderr=subprocess.STDOUT, text=True)
+        match = re.search(r'version "(\d+)', output)
+        if match:
+            java_version = int(match.group(1))
+            if java_version >= required_version:
+                return True
+            else:
+                print(f"Error: Java version {java_version} detected. Version {required_version} or higher is required.")
+                return False
+        else:
+            print("Error: Unable to determine Java version.")
+            return False
+    except FileNotFoundError:
+        print("Error: Java is not installed or not in PATH.")
+        return False
 
 def getProx(trainfile, testfile, getprox="true", savemodel="true", modelname="PF", out="output", repeats=1, num_trees=10, r=5, on_tree="true", shuffle="false", export=1, verbosity=1, csv_has_header="false", target_column="first"):
-    msgList = ['java', '-jar', '-Xmx1g', 'PFGAP.jar']
+    if not check_java_version():
+        return
+
+    msgList = ['java', '-jar', '-Xmx1g', '/yunity/arusty/PF-GAP/PFGAP/Application/PFGAP.jar']
     # Mostly, trainfile, testfile, num_trees, and r are what will be tampered with.
     msgList.extend(["-train=" + trainfile])
     msgList.extend(["-test=" + testfile])
@@ -22,7 +45,11 @@ def getProx(trainfile, testfile, getprox="true", savemodel="true", modelname="PF
     msgList.extend(["-modelname=" + modelname])
     
 
-    subprocess.call(msgList)
+    try:
+        subprocess.check_call(msgList)
+        print("Subprocess finished successfully.")
+    except subprocess.CalledProcessError as e:
+        print("Error executing PFGAP.jar:", e)
     return
     
 
@@ -108,9 +135,10 @@ def getOutlierScores(proxArray, ytrain):
 
 
 # example use:
-# mytrain = "/home/ben/Documents/classes/CS7675/Project/UCRArchive_2018/ArrowHead/ArrowHead_TRAIN.tsv"
-# mytest = "/home/ben/Documents/classes/CS7675/Project/UCRArchive_2018/ArrowHead/ArrowHead_TEST.tsv"
-# getProx(mytrain, mytest, num_trees=18, r=5)
-# prox,labels = getProxArrays()
+mytrain = "/yunity/arusty/PF-GAP/PFGAP/PFGAP/Data/GunPoint_TRAIN.tsv"
+mytest = "/yunity/arusty/PF-GAP/PFGAP/PFGAP/Data/GunPoint_TEST.tsv"
+getProx(mytrain, mytest, num_trees=18, r=5)
+prox,labels = getProxArrays()
+print(prox)
 # prox = SymmetrizeProx(prox)
 # getRawOutlierScores(prox,labels)

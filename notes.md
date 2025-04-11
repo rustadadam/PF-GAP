@@ -6,9 +6,8 @@ https://statrm.byu.edu/frontend/build
 # Week of April 3rd
 ## Tasks 
 3. Add in other methods to the pipeline one by one. 
-    b. **DrCIFClassifier
-    c. **RotationForestClassifier
-
+    b. **DrCIFClassifier (Intervals)
+    c. **RotationForestClassifier (Not a model for Time Series)
 
 ## Changes and Updates
 1. Updated QGAP to fit just once
@@ -22,9 +21,17 @@ https://statrm.byu.edu/frontend/build
     a. Added Static handling (for the proximities - won't predict with static yet)
     b. Enabled it to work in the pipeline
     
+# Week of April 9th
+## Tasks
+1. Investigating Redcomets extra rows
+2. Applying an MDS transform to the proximities and visualizing them as points. 
+    a. See what we get. Look at the data integrity. Is there a distinction between the results
+    b. We can calculate the outlier scores -> we can plot these as well. (Not necessary)
+    c. Run KNN and verify prediction (We would expect a similar score as the forest)
+    d. Use the picture -> predictions using raw data
+3. Figure out the Java Code. 
 
-## Questions before out meeting
-1. Looking at the java code, to run it in python you need the data files. Is that how all of the data we will be given will look like? Sourced in files? Or should I convert the data to a file, and then clean it up. 
-    a. I am currently planning on just using the java implementation but wrapping it a little tighter to manage all of the files (whats made throughout the process is deleted), so the code changes will be minimal. 
-    b. Also, could you share the data files you have been using?
+## Changes and Updates
+1. 
+
 
