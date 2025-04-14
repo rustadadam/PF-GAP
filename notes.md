@@ -33,6 +33,7 @@ https://statrm.byu.edu/frontend/build
 
 ## Changes and Updates
 1. Investigating Redcomets Extra Rows:
-    a. It applies the SMOTE algorithm to ensure we have a min_neighbors requirment for each point.
+    a. It applies the SMOTE algorithm to ensure we have a min_neighbors requirement for each point.
+    
 
 

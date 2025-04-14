@@ -230,7 +230,7 @@ class REDCOMETS(BaseClassifier):
 
         n_lenses = max(2 * int(perc_length * X.shape[1] // 100), 2)
 
-        min_neighbours = min(Counter(y).items(), key=lambda k: k[1])[1]
+        min_neighbours = min(Counter(y).items(), key=lambda k: k[1])[1] #These are determined by how many times each class label appears
         max_neighbours = max(Counter(y).items(), key=lambda k: k[1])[1]
 
         if self.debug_mode:
