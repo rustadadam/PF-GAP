@@ -34,6 +34,8 @@ https://statrm.byu.edu/frontend/build
 ## Changes and Updates
 1. Investigating Redcomets Extra Rows:
     a. It applies the SMOTE algorithm to ensure we have a min_neighbors requirement for each point.
-    
+2. Applied an MDS to the four methods we have. 
+    a. Data looks spread uniformly across the classes. All the methods seem to return similar values, with random points
+    b. 
 
 
