@@ -4,10 +4,6 @@ Link to Resource Manager:
 https://statrm.byu.edu/frontend/build
 
 # Week of April 3rd
-## Tasks 
-3. Add in other methods to the pipeline one by one. 
-    b. **DrCIFClassifier (Intervals)
-    c. **RotationForestClassifier (Not a model for Time Series)
 
 ## Changes and Updates
 1. Updated QGAP to fit just once
@@ -22,14 +18,6 @@ https://statrm.byu.edu/frontend/build
     b. Enabled it to work in the pipeline
     
 # Week of April 9th
-## Tasks
-1. Investigating Redcomets extra rows
-2. Applying an MDS transform to the proximities and visualizing them as points. 
-    a. See what we get. Look at the data integrity. Is there a distinction between the results
-    b. We can calculate the outlier scores -> we can plot these as well. (Not necessary)
-    c. Run KNN and verify prediction (We would expect a similar score as the forest)
-    d. Use the picture -> predictions using raw data
-3. Figure out the Java Code. 
 
 ## Changes and Updates
 1. Investigating Redcomets Extra Rows:
@@ -53,3 +41,4 @@ https://statrm.byu.edu/frontend/build
     a. Compare this to a PHATE just applied to the original dataset. 
     b. Maybe we can just focus on univariate
 5. Called TSF -> Look into that. 
+6. Figure out the Java Code. 
