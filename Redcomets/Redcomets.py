@@ -130,12 +130,12 @@ class REDCOMETS(BaseClassifier):
         # If the transformed X has extra columns, pad static with two dummy columns.
         col_diff = X.shape[0] - static.shape[0]
         if col_diff > 0: #NOTE: test this for many different cases
-            static = np.vstack([static, np.zeros((col_diff, static.shape[1]))])
+            static = np.vstack([static, np.zeros((col_diff, static.shape[1]))]) #TODO: Instead of adding ZEROS: clone the static features from the minority class. This assumes the static features are the same.
 
         if static.shape[0] == X.shape[0]:
             return static
         elif static.shape[0] == 1:
-            return np.tile(static, (X.shape[0], 1))
+            return np.tile(static, (X.shape[0], 1)) 
         else:
             raise ValueError(
                 f"Static feature array has {static.shape[0]} rows but expected {X.shape[0]}"
@@ -636,22 +636,22 @@ class REDCOMETS(BaseClassifier):
         )
         return sax_parallel_res
 
-    def _compute_rf_proximities(self, rf: RandomForestClassifier, X: np.ndarray) -> np.ndarray:
+    def _compute_rf_proximities(self, rf: RandomForestClassifier, X: np.ndarray) -> np.ndarray: #NOTE: Change this Proximity to RFGAP process
         """
         Compute the proximity matrix for samples in X using a single fitted RandomForestClassifier.
         Each element (i,j) is the fraction of trees in which samples i and j share the same leaf.
         """
         leaves = rf.apply(X)  # shape: (n_samples, n_trees)
-        n_samples, n_trees = leaves.shape
-        proximities = np.zeros((n_samples, n_samples))
-        for tree_idx in range(n_trees):
-            leaf_ids = leaves[:, tree_idx]
-            unique_leaves = np.unique(leaf_ids)
-            for leaf in unique_leaves:
-                idx = np.where(leaf_ids == leaf)[0]
-                for i in idx:
-                    proximities[i, idx] += 1
-        proximities /= n_trees
+        # n_samples, n_trees = leaves.shape
+        # proximities = np.zeros((n_samples, n_samples))
+        # for tree_idx in range(n_trees):
+        #     leaf_ids = leaves[:, tree_idx]
+        #     unique_leaves = np.unique(leaf_ids)
+        #     for leaf in unique_leaves:
+        #         idx = np.where(leaf_ids == leaf)[0]
+        #         for i in idx:
+        #             proximities[i, idx] += 1
+        # proximities /= n_trees
         return proximities
 
     def get_ensemble_proximities(self, X: np.ndarray, group: str = "all") -> np.ndarray:

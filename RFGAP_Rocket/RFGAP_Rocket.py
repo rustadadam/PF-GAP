@@ -32,7 +32,7 @@ class RFGAP_Rocket():
             raise ValueError("rocket must be 'Multi' or 'Mini'")
 
         #Initialize rfgap
-        self.rf_gap = RFGAP(prediction_type = prediction_type)
+        self.rf_gap = RFGAP(prediction_type = prediction_type, oob_score = True)
 
         
     def fit(self, X, y, static = None):
