@@ -15,6 +15,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_random_state
+from scipy import sparse
+from helpers import ProximityMixin
 
 from aeon.classification.base import BaseClassifier
 from aeon.transformations.collection import Normalizer
@@ -22,7 +24,7 @@ from aeon.transformations.collection.dictionary_based import SAX, SFA
 from aeon.utils.validation._dependencies import _check_soft_dependencies
 
 
-class REDCOMETS(BaseClassifier):
+class REDCOMETS(BaseClassifier, ProximityMixin):
     """
     Random EnhanceD Co-eye for Multivariate Time Series (RED CoMETS).
 
@@ -105,7 +107,14 @@ class REDCOMETS(BaseClassifier):
         n_jobs=1,
         parallel_backend=None,
         static=None, 
-        debug_mode=False
+        debug_mode=False,
+
+        #ProxityMixin parameters
+        prox_method = "rfgap",
+        matrix_type = "dense",
+        triangular = True,
+        force_symmetric = False,
+        non_zero_diagonal = False,
     ):
         assert variant in [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.variant = variant
@@ -122,6 +131,13 @@ class REDCOMETS(BaseClassifier):
         self._n_channels = None
         self.static = static
         self.debug_mode = debug_mode
+
+        # ProximityMixin parameters
+        self.prox_method = prox_method
+        self.matrix_type = matrix_type
+        self.triangular  = triangular
+        self.non_zero_diagonal = non_zero_diagonal
+        self.force_symmetric = force_symmetric
 
         super().__init__()
 
@@ -641,18 +657,58 @@ class REDCOMETS(BaseClassifier):
         Compute the proximity matrix for samples in X using a single fitted RandomForestClassifier.
         Each element (i,j) is the fraction of trees in which samples i and j share the same leaf.
         """
-        leaves = rf.apply(X)  # shape: (n_samples, n_trees)
-        # n_samples, n_trees = leaves.shape
-        # proximities = np.zeros((n_samples, n_samples))
-        # for tree_idx in range(n_trees):
-        #     leaf_ids = leaves[:, tree_idx]
-        #     unique_leaves = np.unique(leaf_ids)
-        #     for leaf in unique_leaves:
-        #         idx = np.where(leaf_ids == leaf)[0]
-        #         for i in idx:
-        #             proximities[i, idx] += 1
-        # proximities /= n_trees
-        return proximities
+        self.leaf_matrix = rf.apply(X)  # shape: (n_samples, n_trees)
+        #Create estimator
+        self._estimator = rf
+        
+        if self.prox_method == 'oob':
+            self.oob_indices = self.get_oob_indices(X)
+            
+            self.oob_leaves = self.oob_indices * self.leaf_matrix
+
+        if self.prox_method == 'rfgap':
+
+            self.oob_indices = self.get_oob_indices(X)
+            self.in_bag_counts = self.get_in_bag_counts(X)
+       
+            self.in_bag_indices = 1 - self.oob_indices
+
+            self.in_bag_leaves = self.in_bag_indices * self.leaf_matrix
+            self.oob_leaves = self.oob_indices * self.leaf_matrix
+
+        n, _ = self.leaf_matrix.shape
+
+        prox_vals, rows, cols = self.get_proximity_vector(0)
+        for i in range(1, n):
+            if self._estimator.verbose and i % 100 == 0:
+                print('Finished with {} rows'.format(i))
+            prox_val_temp, rows_temp, cols_temp = self.get_proximity_vector(i)
+            prox_vals.extend(prox_val_temp)
+            rows.extend(rows_temp)
+            cols.extend(cols_temp)
+
+        if self.triangular and self.prox_method != 'rfgap':
+            prox_sparse = sparse.csr_matrix(
+                (
+                    np.array(prox_vals + prox_vals),
+                    (np.array(rows + cols), np.array(cols + rows))
+                ),
+                shape=(n, n)
+            )
+            prox_sparse.setdiag(1)
+        else:
+            prox_sparse = sparse.csr_matrix(
+                (np.array(prox_vals), (np.array(rows), np.array(cols))),
+                shape=(n, n)
+            )
+
+        if self.force_symmetric:
+            prox_sparse = (prox_sparse + prox_sparse.transpose()) / 2
+
+        if self.matrix_type == 'dense':
+            return np.array(prox_sparse.todense())
+        else:
+            return prox_sparse
 
     def get_ensemble_proximities(self, X: np.ndarray, group: str = "all") -> np.ndarray:
         """
