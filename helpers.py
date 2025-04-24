@@ -40,7 +40,7 @@ def getOutlierScores(proxArray, ytrain):
     for uniquelabel in uniqueLabels:
         proxes = [scores[i] for i in mydict[uniquelabel]]
         medians[uniquelabel] = np.median(proxes)
-        mean = np.mean(proxes)
+        #mean = np.mean(proxes)
         tosum = [np.abs(x-medians[uniquelabel]) for x in proxes] #[np.abs(x-mean) for x in proxes]
         mads[uniquelabel] = sum(tosum)/len(tosum)
         
@@ -257,7 +257,6 @@ class ProximityMixin:
             data = prox_vec[cols]
 
         return data.tolist(), rows.tolist(), cols.tolist()
-
 
     def get_proximities(self):
         from scipy import sparse
