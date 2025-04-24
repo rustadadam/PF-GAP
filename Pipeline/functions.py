@@ -17,6 +17,9 @@ def get_proximities(model, Xtrain):
     if hasattr(model, "proximities"):
         return model.proximities
     
+    elif hasattr(model, "get_ensemble_proximities"):
+        return model.get_ensemble_proximities(Xtrain, group = "all")
+    
     #Get proximities -> Maybe make a switch case thing here
     elif hasattr(model, "get_proximities"): #QGAP
         prox = model.get_proximities()
@@ -26,9 +29,6 @@ def get_proximities(model, Xtrain):
             return prox.todense()
         else:
             return prox
-        
-    elif hasattr(model, "get_ensemble_proximities"):
-        return model.get_ensemble_proximities(Xtrain, group = "all")
 
     raise AttributeError("Model does not have expected Methods.")
 
