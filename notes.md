@@ -42,3 +42,6 @@ https://statrm.byu.edu/frontend/build
     b. Maybe we can just focus on univariate
 5. Called TSF -> Look into that. 
 6. Figure out the Java Code. 
+
+## Changes and Updates
+1. Updated Redcomets proximity function to use RF GAP proximities
