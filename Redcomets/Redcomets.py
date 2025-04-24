@@ -143,10 +143,21 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
 
     def _prepare_static(self, X):
         static = np.asarray(self.static)
-        # If the transformed X has extra columns, pad static with two dummy columns.
+        # If the transformed X has extra columns, pad static by cloning the minority class features.
         col_diff = X.shape[0] - static.shape[0]
-        if col_diff > 0: #NOTE: test this for many different cases
-            static = np.vstack([static, np.zeros((col_diff, static.shape[1]))]) #TODO: Instead of adding ZEROS: clone the static features from the minority class. This assumes the static features are the same.
+        if col_diff > 0:  # Test this for many different cases
+            # Identify the minority class
+            unique, counts = np.unique(self.static[:, -1], return_counts=True)
+            minority_class = unique[np.argmin(counts)]
+            
+            # Clone rows belonging to the minority class
+            minority_rows = static[static[:, -1] == minority_class]
+            if len(minority_rows) == 0:
+                raise ValueError("No rows found for the minority class to clone.")
+            
+            # Repeat the minority rows to match the required number of rows
+            cloned_rows = np.tile(minority_rows, (col_diff // len(minority_rows) + 1, 1))[:col_diff]
+            static = np.vstack([static, cloned_rows])
 
         if static.shape[0] == X.shape[0]:
             return static

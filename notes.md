@@ -33,15 +33,16 @@ https://statrm.byu.edu/frontend/build
 # Week of April 15th
 
 ## Tasks
-0. Change the proxmimity function in Redcomets to match RF_GAP
 1. Instead of adding ZEROS: clone the static features from the minority class. This assumes the static features are the same.
 2. Use RF_OOB scores
 3. Tests against other benchmarks.
 4. Look at the PHATE visualization to the proximities (use precomputed_affinity)
     a. Compare this to a PHATE just applied to the original dataset. 
     b. Maybe we can just focus on univariate
-5. Called TSF -> Look into that. 
+5. Called TSF (Times Series Forest) -> Look into that. 
 6. Figure out the Java Code. 
 
 ## Changes and Updates
 1. Updated Redcomets proximity function to use RF GAP proximities
+2. Updated Redcomets to handle the static features additions correctly. Oversampling techniques.
+3. 
