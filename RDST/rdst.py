@@ -10,18 +10,11 @@ sys.path.insert(0, '/yunity/arusty/PF-GAP')
 __maintainer__ = ["baraline"]
 __all__ = ["RDSTClassifier"]
 
-from typing import Union
-from scipy import sparse
-
 import numpy as np
-from sklearn.linear_model import RidgeClassifierCV
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import ExtraTreesClassifier, ExtraTreesRegressor
+from sklearn.ensemble import ExtraTreesClassifier
 from helpers import ProximityMixin
 
 from aeon.base._base import _clone_estimator
-from aeon.classification.base import BaseClassifier
 from aeon.transformations.collection.shapelet_based import (
     RandomDilatedShapeletTransform,
 )
