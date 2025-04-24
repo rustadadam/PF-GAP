@@ -33,8 +33,7 @@ https://statrm.byu.edu/frontend/build
 # Week of April 15th
 
 ## Tasks
-1. Instead of adding ZEROS: clone the static features from the minority class. This assumes the static features are the same.
-2. Use RF_OOB scores
+2. Use RF_OOB scores for the prediction scoring as well
 3. Tests against other benchmarks.
 4. Look at the PHATE visualization to the proximities (use precomputed_affinity)
     a. Compare this to a PHATE just applied to the original dataset. 
