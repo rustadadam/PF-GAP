@@ -192,12 +192,35 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
         )
 
     def fit(self, X, y, X_static=None):
-        #From the proximity mixin
-        self._estimator = self.base_estimator
-        self.prox_fit(X, None)
+        # Call the parent class's _fit method to train the forest
+        super()._fit(X, y)
+        Xt = self._predict_setup(X)
+
+        # Apply prox_fit to each estimator in the ensemble using its transformed data
+        for i in range(len(self.estimators_)):
+            interval_features = np.empty((Xt[0].shape[0], 0))
+
+
+            for r in range(len(Xt)):
+                f = self.intervals_[i][r].transform(Xt[r])
+                interval_features = np.hstack((interval_features, f))
+
+            if isinstance(self.replace_nan, str) and self.replace_nan.lower() == "nan":
+                interval_features = np.nan_to_num(
+                    interval_features, False, np.nan, np.nan, np.nan
+                )
+            elif isinstance(self.replace_nan, (int, float)):
+                interval_features = np.nan_to_num(
+                    interval_features,
+                    False,
+                    self.replace_nan,
+                    self.replace_nan,
+                    self.replace_nan,
+                )
+
+            # For the interval code
+            self._estimator = self.estimators_[i]
+            self.prox_fit(Xt, None)
 
         self.is_fitted = True
-
-        return super()._fit(X, y)
-    # def _fit(self, X, y):
-    #     return super()._fit(X, y)
+        return self
