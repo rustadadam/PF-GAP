@@ -292,7 +292,7 @@ class ProximityRandomForest(RandomForestClassifier, ProximityMixin):
             interval_features = np.nan_to_num(
                 interval_features, False, np.nan, np.nan, np.nan
             )
-        elif isinstance(self.replace_nan, (int, float)):
+        elif isinstance(self.tsf.replace_nan, (int, float)):
             interval_features = np.nan_to_num(
                 interval_features,
                 False,
