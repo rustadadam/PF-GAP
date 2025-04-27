@@ -9,6 +9,8 @@ __maintainer__ = []
 __all__ = ["TimeSeriesForestClassifier"]
 
 import numpy as np
+from joblib import Parallel, delayed
+from sklearn.ensemble import RandomForestClassifier
 
 from aeon.base._estimators.interval_based.base_interval_forest import BaseIntervalForest
 from aeon.classification import BaseClassifier
@@ -191,15 +193,21 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
             parallel_backend=None
         )
 
+        #This must be overridden to use the ProximityMixin
+        self.interval_selection_method = "supervised"
+
     def fit(self, X, y, X_static=None):
         # Call the parent class's _fit method to train the forest
         super()._fit(X, y)
+        self.is_fitted = True
+
+        return self
+
         Xt = self._predict_setup(X)
 
-        # Apply prox_fit to each estimator in the ensemble using its transformed data
-        for i in range(len(self.estimators_)):
+       
+        for i in range(self._n_estimators):
             interval_features = np.empty((Xt[0].shape[0], 0))
-
 
             for r in range(len(Xt)):
                 f = self.intervals_[i][r].transform(Xt[r])
@@ -220,7 +228,78 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
 
             # For the interval code
             self._estimator = self.estimators_[i]
-            self.prox_fit(Xt, None)
+            self._estimator.n_estimators = 1
+            self.prox_fit(interval_features, None)
+        
+        self.is_fitted = True
+
+        return super().get_proximities()
+        
 
         self.is_fitted = True
         return self
+
+
+class ProximityRandomForest(RandomForestClassifier, ProximityMixin):
+    def __init__(self, base_estimators, intervals, series_transformers, tsf):
+        # Initialize the RandomForestClassifier with the provided estimators
+        super().__init__(n_estimators=len(base_estimators))
+        self.estimators_ = list(base_estimators)  # Ensure it's a list, not a tuple
+        self.intervals_ = intervals  # Interval transformers from TSF
+        self.series_transformers = series_transformers  # Series transformers from TSF
+        self.tsf = tsf
+
+    def fit(self, X, y=None):
+        # Override fit to ensure compatibility with ProximityMixin
+        raise NotImplementedError("ProximityRandomForest does not support fitting. Use pre-trained estimators.")
+
+    def prox_fit(self, X, x_test=None):
+        # Transform the input data using the interval-based transformations for all estimators
+        Xt = self.tsf._predict_setup(X)
+
+        # Calculate the leaf indices for each estimator
+        leaf_indices = Parallel(n_jobs=self.tsf._n_jobs)(
+            delayed(self._prox_fit_for_estimator)(
+                Xt,
+                self.estimators_[i],
+                self.intervals_[i],
+            )
+            for i in range(len(self.estimators_))
+        )
+        self.leaf_matrix = np.column_stack(leaf_indices)  # Combine into a single matrix
+
+        if x_test is not None:
+            Xt_test = self.tsf._predict_setup(x_test)
+            test_leaf_indices = Parallel(n_jobs=self.tsf._n_jobs)(
+                delayed(self._prox_fit_for_estimator)(
+                    Xt_test,
+                    self.estimators_[i],
+                    self.intervals_[i],
+                )
+                for i in range(len(self.estimators_))
+            )
+            self.test_leaf_matrix = np.column_stack(test_leaf_indices)
+
+    def _prox_fit_for_estimator(self, Xt, estimator, intervals):
+        # Transform the data for the specific estimator
+        interval_features = np.empty((Xt[0].shape[0], 0))
+
+        for r in range(len(Xt)):
+            f = intervals[r].transform(Xt[r])
+            interval_features = np.hstack((interval_features, f))
+
+        if isinstance(self.tsf.replace_nan, str) and self.tsf.replace_nan.lower() == "nan":
+            interval_features = np.nan_to_num(
+                interval_features, False, np.nan, np.nan, np.nan
+            )
+        elif isinstance(self.replace_nan, (int, float)):
+            interval_features = np.nan_to_num(
+                interval_features,
+                False,
+                self.tsf.replace_nan,
+                self.tsf.replace_nan,
+                self.tsf.replace_nan,
+            )
+
+        # Apply the estimator to get leaf indices
+        return estimator.apply(interval_features)

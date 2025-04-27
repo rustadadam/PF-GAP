@@ -45,3 +45,8 @@ https://statrm.byu.edu/frontend/build
 1. Updated Redcomets proximity function to use RF GAP proximities
 2. Updated Redcomets to handle the static features additions correctly. Oversampling techniques.
 3. 
+
+## Questions
+1. TSF related questions
+    1. I believe its trains a bunch of estimators on random parts of the interval. This makes me wonder how you could even get the proximities out of it? Because each estimator is a tree (not a forest) and is trained on different data. ( I guess intervas are selcted by Random, supervised, or random-supervised)
+    2. 
