@@ -162,17 +162,6 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
         triangular = True,
         force_symmetric = False,
         non_zero_diagonal = False,
-        #TSF
-        base_estimator=None,
-        n_estimators=200,
-        n_intervals="sqrt",
-        min_interval_length=3,
-        max_interval_length=np.inf,
-        time_limit_in_minutes=None,
-        contract_max_n_estimators=500,
-        random_state=None,
-        n_jobs=1,
-        parallel_backend=None,
     ):
         self.prox_method = prox_method
         self.matrix_type = matrix_type
@@ -181,7 +170,7 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
         self.force_symmetric = force_symmetric
 
         super().__init__(
-            base_estimator=None,
+            base_estimator=RandomForestClassifier,
             n_estimators=200,
             n_intervals="sqrt",
             min_interval_length=3,
@@ -241,7 +230,19 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
 
 
 class ProximityRandomForest(RandomForestClassifier, ProximityMixin):
-    def __init__(self, base_estimators, intervals, series_transformers, tsf):
+    def __init__(self, base_estimators, intervals, series_transformers, tsf,
+                 #ProximityMixin
+                prox_method = "rfgap",
+                matrix_type = "sparse",
+                triangular = True,
+                force_symmetric = False,
+                non_zero_diagonal = False):
+        
+        self.prox_method = prox_method
+        self.matrix_type = matrix_type
+        self.triangular  = triangular
+        self.non_zero_diagonal = non_zero_diagonal
+        self.force_symmetric = force_symmetric
         # Initialize the RandomForestClassifier with the provided estimators
         super().__init__(n_estimators=len(base_estimators))
         self.estimators_ = list(base_estimators)  # Ensure it's a list, not a tuple
@@ -279,6 +280,35 @@ class ProximityRandomForest(RandomForestClassifier, ProximityMixin):
                 for i in range(len(self.estimators_))
             )
             self.test_leaf_matrix = np.column_stack(test_leaf_indices)
+
+        if x_test is not None:
+            n_test = np.shape(x_test)[0]
+            
+            self.leaf_matrix_test = self.apply(x_test)
+            self.leaf_matrix = np.concatenate((self.leaf_matrix, self.leaf_matrix_test), axis = 0)
+                                
+        if self.prox_method == 'oob':
+            self.oob_indices = self.get_oob_indices(X)
+            
+            if x_test is not None:
+                self.oob_indices = np.concatenate((self.oob_indices, np.ones((n_test, self.n_estimators))))
+            
+            self.oob_leaves = self.oob_indices * self.leaf_matrix
+
+        if self.prox_method == 'rfgap':
+
+            self.oob_indices = self.get_oob_indices(X)
+            self.in_bag_counts = self.get_in_bag_counts(X)
+
+            
+            if x_test is not None:
+                self.oob_indices = np.concatenate((self.oob_indices, np.ones((n_test, self.n_estimators))))
+                self.in_bag_counts = np.concatenate((self.in_bag_counts, np.zeros((n_test, self.n_estimators))))                
+                            
+            self.in_bag_indices = 1 - self.oob_indices
+
+            self.in_bag_leaves = self.in_bag_indices * self.leaf_matrix
+            self.oob_leaves = self.oob_indices * self.leaf_matrix
 
     def _prox_fit_for_estimator(self, Xt, estimator, intervals):
         # Transform the data for the specific estimator
