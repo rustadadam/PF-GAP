@@ -170,7 +170,7 @@ class TSP_GAP(TimeSeriesForestClassifier, ProximityMixin):
         self.force_symmetric = force_symmetric
 
         super().__init__(
-            base_estimator=RandomForestClassifier,
+            base_estimator=RandomForestClassifier(n_estimators=10, random_state=0),
             n_estimators=200,
             n_intervals="sqrt",
             min_interval_length=3,
