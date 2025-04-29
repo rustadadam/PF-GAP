@@ -50,3 +50,20 @@ https://statrm.byu.edu/frontend/build
 1. TSF related questions
     1. I believe its trains a bunch of estimators on random parts of the interval. This makes me wonder how you could even get the proximities out of it? Because each estimator is a tree (not a forest) and is trained on different data. ( I guess intervas are selcted by Random, supervised, or random-supervised)
     2. 
+
+
+# Week of April 29th
+
+## Tasks
+1. Create labels. File from Ben: https://drive.google.com/file/d/176LkdgGEVFJCW70DXx2pNWZHOgXZ3Ucq/view?usp=sharing 
+2. K-fold similarities and tests
+3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc)
+4. Look at weighting the static variables
+
+
+## Possibilities to expand the project
+1. New distances measures for PF-GAP
+    1. Maybe using a regression adaptation.
+    2. Imputations with proximities?
+1. DTW - Parrelell 
+    1. Might allow for multivariable time series. This could compute time-series by handling static features. https://pypi.org/project/dtwParallel/#description 
