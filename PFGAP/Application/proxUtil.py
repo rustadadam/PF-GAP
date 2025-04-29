@@ -87,6 +87,8 @@ def getProxArrays(proxfile="ForestProximities.txt", yfile="ytrain.txt"):
     # Delete the files after reading them
     os.remove(proxfile)
     os.remove(yfile)
+    os.remove("Predictions.txt")
+    os.remove("PF.ser")
 
     return proxArr, yArr
 
@@ -135,10 +137,10 @@ def getOutlierScores(proxArray, ytrain):
 
 
 # example use:
-mytrain = "/yunity/arusty/PF-GAP/PFGAP/PFGAP/Data/GunPoint_TRAIN.tsv"
-mytest = "/yunity/arusty/PF-GAP/PFGAP/PFGAP/Data/GunPoint_TEST.tsv"
-getProx(mytrain, mytest, num_trees=18, r=5)
-prox,labels = getProxArrays()
-print(prox)
+# mytrain = "/yunity/arusty/PF-GAP/PFGAP/PFGAP/Data/GunPoint_TRAIN.tsv"
+# mytest = "/yunity/arusty/PF-GAP/PFGAP/PFGAP/Data/GunPoint_TEST.tsv"
+# getProx(mytrain, mytest, num_trees=18, r=5)
+# prox,labels = getProxArrays()
+# print(prox)
 # prox = SymmetrizeProx(prox)
 # getRawOutlierScores(prox,labels)
