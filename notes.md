@@ -27,7 +27,6 @@ https://statrm.byu.edu/frontend/build
     b. Trained A KNN on the MDS. Prediction score were not great with MDS reduction, but perfect with the full proximites. 
         1. How can we better visualize this without losing so much data? Look at the corresponding spread as a line for each row?
             a. Built several more visualizations. Note: simply doing a PCA shift preserves class accuracy. 
-    c.
 
 
 # Week of April 15th
@@ -38,13 +37,11 @@ https://statrm.byu.edu/frontend/build
 4. Look at the PHATE visualization to the proximities (use precomputed_affinity)
     a. Compare this to a PHATE just applied to the original dataset. 
     b. Maybe we can just focus on univariate
-5. Called TSF (Times Series Forest) -> Look into that. 
-6. Figure out the Java Code. 
 
 ## Changes and Updates
 1. Updated Redcomets proximity function to use RF GAP proximities
 2. Updated Redcomets to handle the static features additions correctly. Oversampling techniques.
-3. 
+3. Worked on TSF. Decided not worth the effort
 
 ## Questions
 1. TSF related questions
