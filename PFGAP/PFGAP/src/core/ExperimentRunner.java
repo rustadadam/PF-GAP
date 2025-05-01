@@ -103,7 +103,7 @@ public class ExperimentRunner {
 				ProximityForest forest = new ProximityForest(i);
 
 				//train model
-				forest.train(train_data);
+				forest.train(train_data); //NOTE -> We may be able to just slap the static features here (or just before here)
 
 				if(AppContext.savemodel) {
 					// save the trained model

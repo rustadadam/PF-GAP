@@ -26,7 +26,7 @@ def getProx(trainfile, testfile, getprox="true", savemodel="true", modelname="PF
     if not check_java_version():
         return
 
-    msgList = ['java', '-jar', '-Xmx1g', '/yunity/arusty/PF-GAP/PFGAP/Application/PFGAP.jar']
+    msgList = ['java', '-jar', '-Xmx1g', '/yunity/arusty/PF-GAP/PFGAP/Application/PFGAP.jar'] #NOTE: This path will need to be updated (if someone else were to use this code)
     # Mostly, trainfile, testfile, num_trees, and r are what will be tampered with.
     msgList.extend(["-train=" + trainfile])
     msgList.extend(["-test=" + testfile])
