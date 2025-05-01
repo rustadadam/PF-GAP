@@ -30,17 +30,28 @@ class PyPFGAP:
         """
         Runs the Java proces
         """
-        # Call the Java process to calculate proximities
-        # Expand the user path and create the full file path
-        tsv_path = os.path.expanduser(self.train_file)
+        try:
+            tsv_path = os.path.expanduser(self.train_file)
 
+            if X.ndim > 2:
+                X = X.reshape(X.shape[0], -1)
+
+            # Ensure y is a column vector
+            if y.ndim == 1:
+                y = y.reshape(-1, 1)
+
+            # Combine y as first column and X horizontally
+            data = np.hstack([y, X])
+        except Exception as e:
+            print(f"Error reshaping data: {e}")
+            return None
         
-        # Ensure y is a column vector
-        if y.ndim == 1:
-            y = y.reshape(-1, 1)
-        # Combine X and y horizontally
-        data = np.hstack([X, y])
         # Save combined data to a TSV file
+        # ensure the output directory exists and create an empty file
+        dirpath = os.path.dirname(tsv_path)
+        if dirpath and not os.path.exists(dirpath):
+            os.makedirs(dirpath, exist_ok=True)
+        open(tsv_path, 'w').close()
         np.savetxt(tsv_path, data, delimiter='\t', fmt='%s')
     
 
