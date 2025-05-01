@@ -26,48 +26,66 @@ class PyPFGAP:
         self.prox = None
         self.labels = None
 
-    def run_Java(self, X, y, static = None):
+    def run_Java(self, X_train, y_train, X_test, y_test, static=None):
         """
-        Runs the Java proces
+        Runs the Java process on training and test data.
         """
         try:
-            tsv_path = os.path.expanduser(self.train_file)
+            # Paths for train/test TSVs
+            tsv_train = os.path.expanduser(self.train_file)
+            tsv_test = os.path.expanduser(self.test_file)
 
-            if X.ndim > 2:
-                X = X.reshape(X.shape[0], -1)
+            # Flatten multidimensional arrays
+            if X_train.ndim > 2:
+                X_train = X_train.reshape(X_train.shape[0], -1)
+            if X_test.ndim > 2:
+                X_test = X_test.reshape(X_test.shape[0], -1)
 
             # Ensure y is a column vector
-            if y.ndim == 1:
-                y = y.reshape(-1, 1)
+            if y_train.ndim == 1:
+                y_train = y_train.reshape(-1, 1)
+            if y_test.ndim == 1:
+                y_test = y_test.reshape(-1, 1)
 
             # Combine y as first column and X horizontally
-            data = np.hstack([y, X])
+            data_train = np.hstack([y_train, X_train])
+            data_test  = np.hstack([y_test,  X_test])
         except Exception as e:
             print(f"Error reshaping data: {e}")
             return None
-        
-        # Save combined data to a TSV file
-        # ensure the output directory exists and create an empty file
-        dirpath = os.path.dirname(tsv_path)
-        if dirpath and not os.path.exists(dirpath):
-            os.makedirs(dirpath, exist_ok=True)
-        open(tsv_path, 'w').close()
-        np.savetxt(tsv_path, data, delimiter='\t', fmt='%s')
-    
 
-        proxUtil.getProx(tsv_path, None, num_trees=18, r=5)
+        # Helper to write a TSV
+        def _write_tsv(path, data):
+            d = os.path.dirname(path)
+            if d and not os.path.exists(d):
+                os.makedirs(d, exist_ok=True)
+            # overwrite / create file
+            open(path, 'w').close()
+            np.savetxt(path, data, delimiter='\t', fmt='%s')
+
+        # Write train and test TSVs
+        _write_tsv(tsv_train, data_train)
+        _write_tsv(tsv_test,  data_test)
+
+        # Call the proximity calculator
+        proxUtil.getProx(
+            tsv_train,
+            tsv_test,
+            num_trees=self.num_trees,
+            r=self.r
+        )
+        
         prox,labels = proxUtil.getProxArrays()
 
-        if os.path.exists(tsv_path):
-            os.remove(tsv_path)
+        if os.path.exists(tsv_train):
+            os.remove(tsv_train)
+        if os.path.exists(tsv_test):
+            os.remove(tsv_test)
 
-        self.pox = prox
+        self.prox = prox
 
         return prox
         
-
-        
-
     def get_proximities(self):
     
         return self.prox
