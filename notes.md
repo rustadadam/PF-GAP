@@ -52,7 +52,6 @@ https://statrm.byu.edu/frontend/build
 # Week of April 29th
 
 ## Tasks
-0. Work on updating with PFGAP
 1. Create labels. File from Ben: https://drive.google.com/file/d/176LkdgGEVFJCW70DXx2pNWZHOgXZ3Ucq/view?usp=sharing 
 2. K-fold similarities and tests
 3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc)
@@ -71,4 +70,3 @@ https://statrm.byu.edu/frontend/build
 1. Fixed PFGAP to work in the pipeline
     a. Built a wrapper class to fit and things
     b. It does use the train data as the test data -> This doesn't effect the proximities though, right?
-    
