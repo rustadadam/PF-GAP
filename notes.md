@@ -65,3 +65,10 @@ https://statrm.byu.edu/frontend/build
     2. Imputations with proximities?
 1. DTW - Parrelell 
     1. Might allow for multivariable time series. This could compute time-series by handling static features. https://pypi.org/project/dtwParallel/#description 
+
+
+## Changes and Updates
+1. Fixed PFGAP to work in the pipeline
+    a. Built a wrapper class to fit and things
+    b. It does use the train data as the test data -> This doesn't effect the proximities though, right?
+    

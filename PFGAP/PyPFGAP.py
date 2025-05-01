@@ -26,10 +26,16 @@ class PyPFGAP:
         self.prox = None
         self.labels = None
 
-    def run_Java(self, X_train, y_train, X_test, y_test, static=None):
+    def fit(self, X_train, y_train, X_test = None, y_test = None, static=None):
         """
         Runs the Java process on training and test data.
         """
+
+        if X_test is None:
+            X_test = X_train
+        if y_test is None:
+            y_test = y_train
+
         try:
             # Paths for train/test TSVs
             tsv_train = os.path.expanduser(self.train_file)
