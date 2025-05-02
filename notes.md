@@ -70,3 +70,5 @@ https://statrm.byu.edu/frontend/build
 1. Fixed PFGAP to work in the pipeline
     a. Built a wrapper class to fit and things
     b. It does use the train data as the test data -> This doesn't effect the proximities though, right?
+2. Created the labels. NOTE: there are a few that have missing values... I wonder if the file I have has been corrupted
+3. Retrieved the proximities with the data across all five models
