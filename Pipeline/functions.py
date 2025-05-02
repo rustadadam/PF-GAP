@@ -1,7 +1,7 @@
 import numpy as np
 
 #Function to convert data to proximities
-def data_to_proximities(model, Xtrain, ytrain, Xtest, Xstatic_train = None, Xstatic_test = None):
+def data_to_proximities(model, Xtrain, ytrain, Xtest = None, Xstatic_train = None, Xstatic_test = None):
 
     #Fit model
     model = fit_model(model, Xtrain, ytrain, Xstatic_train)
