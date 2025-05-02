@@ -52,7 +52,6 @@ https://statrm.byu.edu/frontend/build
 # Week of April 29th
 
 ## Tasks
-1. Create labels. File from Ben: https://drive.google.com/file/d/176LkdgGEVFJCW70DXx2pNWZHOgXZ3Ucq/view?usp=sharing 
 2. K-fold similarities and tests
 3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc)
 4. Look at weighting the static variables
