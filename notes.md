@@ -73,4 +73,9 @@ https://statrm.byu.edu/frontend/build
 3. Retrieved the proximities with the data across all five models
     a. To Note: PF-GAP is significantly slower to the point its really bad. 
     b. Implemented the Static feature application
+4. Implemented the K-fold validation tests
+    a. NOTE: None of the methods to validate this are "KOSHER" - meaning they all kind of cheat in their own ways. To avoid this, we can do the rf-extend approach here, though we would have to implement this all the way from the beggining manually because of the nature of transforming the features with the proximity models we use.
+    b. The cheater scores look good 
+    c. The MDS visualizations look terrible. Did a K-Clustering algorithm to verify if results are optimal. They aren't. PCA is better though.
+5. 
     
