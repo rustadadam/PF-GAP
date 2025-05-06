@@ -52,8 +52,7 @@ https://statrm.byu.edu/frontend/build
 # Week of April 29th
 
 ## Tasks
-2. K-fold similarities and tests
-3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc)
+3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc) instead of the proximities
 4. Look at weighting the static variables
 
 
@@ -77,5 +76,6 @@ https://statrm.byu.edu/frontend/build
     a. NOTE: None of the methods to validate this are "KOSHER" - meaning they all kind of cheat in their own ways. To avoid this, we can do the rf-extend approach here, though we would have to implement this all the way from the beggining manually because of the nature of transforming the features with the proximity models we use.
     b. The cheater scores look good 
     c. The MDS visualizations look terrible. Did a K-Clustering algorithm to verify if results are optimal. They aren't. PCA is better though.
-5. 
+5. Got FreshPrince to work
+
     
