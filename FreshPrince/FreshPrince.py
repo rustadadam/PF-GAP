@@ -18,6 +18,51 @@ from aeon.classification.feature_based import FreshPRINCEClassifier #Regressor d
 
 from helpers import ProximityMixin  # Import the ProximityMixin
 
+def rotation_forest_apply(self, X):
+    """
+    Apply the RotationForestClassifier to the input data and return the leaf indices.
+
+    Parameters
+    ----------
+    X : 2d ndarray or DataFrame of shape = [n_cases, n_attributes]
+        The input data to apply to the trees.
+
+    Returns
+    -------
+    leaf_matrix : np.ndarray
+        A matrix where each row corresponds to a sample and each column corresponds
+        to the leaf index of a tree in the ensemble.
+    """
+    if not hasattr(self, "_is_fitted") or not self._is_fitted:
+        from sklearn.exceptions import NotFittedError
+
+        raise NotFittedError(
+            f"This instance of {self.__class__.__name__} has not "
+            f"been fitted yet; please call `fit` first."
+        )
+
+    # Data preprocessing
+    X = self._check_X(X)
+    X = X[:, self._useful_atts]
+    X = (X - self._min) / self._ptp
+
+    # Collect leaf indices from each tree
+    leaf_matrix = []
+    for tree, pca, group in zip(self.estimators_, self._pcas, self._groups):
+        # Transform the data using the PCA for this tree
+        X_transformed = np.concatenate(
+            [pca[i].transform(X[:, group[i]]) for i in range(len(group))], axis=1
+        )
+        X_transformed = np.nan_to_num(
+            X_transformed, False, 0, np.finfo(np.float32).max, np.finfo(np.float32).min
+        )
+        # Get the leaf indices from the decision tree
+        leaf_indices = tree.apply(X_transformed)
+        leaf_matrix.append(leaf_indices)
+
+    # Combine leaf indices from all trees into a single matrix
+    return np.column_stack(leaf_matrix)
+
 class FreshPRINCE_GAP(FreshPRINCEClassifier, ProximityMixin):
     """
     Fresh Pipeline with RotatIoN forest Classifier.
@@ -131,6 +176,10 @@ class FreshPRINCE_GAP(FreshPRINCEClassifier, ProximityMixin):
             X_t = np.hstack([X_t, static])
 
         self._rotf.fit(X_t, y)
+
+        #Implement custom built apply method
+        self._rotf.apply = lambda X: rotation_forest_apply(self._rotf, X)
+
         self._estimator = self._rotf
 
         # From the proximity mixin

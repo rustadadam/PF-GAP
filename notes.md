@@ -78,6 +78,7 @@ https://statrm.byu.edu/frontend/build
     c. The MDS visualizations look terrible. Did a K-Clustering algorithm to verify if results are optimal. They aren't. PCA is better though.
 5. Got time_series_forest to work in a partial way
 6. Successfully uncorrupted the requirements file that FreshPrince works
-    a. Needs implementation still
+    a. Needs implementation still: Difficulties -> "RotationForestClassifier is designed to use decision trees as base estimators, but it applies PCA transformations to subsets of the features before training the trees. This transformation makes it non-trivial to directly access the leaf indices of the trees because the input data is altered before being passed to the trees."
+    
 
     
