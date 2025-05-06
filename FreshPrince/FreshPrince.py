@@ -123,13 +123,15 @@ class FreshPRINCE_GAP(FreshPRINCEClassifier, ProximityMixin):
         self :
             Reference to self.
         """
-        X_t = self._fit_fp_shared(X, y)
+        X_t = self._fit_fp_shared(X, y) # ._tsfresh is the transformation model. ._rotf is the prediction
+
 
         # Add static data to X_t if provided
         if static is not None:
             X_t = np.hstack([X_t, static])
 
         self._rotf.fit(X_t, y)
+        self._estimator = self._rotf
 
         # From the proximity mixin
         self.prox_fit(X_t, None)
