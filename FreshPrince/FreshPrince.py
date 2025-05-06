@@ -180,7 +180,12 @@ class FreshPRINCE_GAP(FreshPRINCEClassifier, ProximityMixin):
         #Implement custom built apply method
         self._rotf.apply = lambda X: rotation_forest_apply(self._rotf, X)
 
+        #Set up _rotfl
+        self._rotf.verbose = 0
+
+
         self._estimator = self._rotf
+
 
         # From the proximity mixin
         self.prox_fit(X_t, None)
