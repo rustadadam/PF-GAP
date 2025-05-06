@@ -79,6 +79,6 @@ https://statrm.byu.edu/frontend/build
 5. Got time_series_forest to work in a partial way
 6. Successfully uncorrupted the requirements file that FreshPrince works
     a. Needs implementation still: Difficulties -> "RotationForestClassifier is designed to use decision trees as base estimators, but it applies PCA transformations to subsets of the features before training the trees. This transformation makes it non-trivial to directly access the leaf indices of the trees because the input data is altered before being passed to the trees."
-    
+    b. To overcome this, I implemented a custom method. It now works, though we should talk through the process. 
 
     
