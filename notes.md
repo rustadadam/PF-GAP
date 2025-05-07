@@ -85,5 +85,6 @@ https://statrm.byu.edu/frontend/build
     b. Implemented the return correlation
 8. Added feature importances
     a. The static features have little overall importance, but they do have some (since there are so many features, any importance could be significant).
-9. 
+9. Added Static-feature weighting to RF-Rocket
+    a. Applied weights to static features. It doesn't seem to make much of a difference. 
     
