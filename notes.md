@@ -83,5 +83,7 @@ https://statrm.byu.edu/frontend/build
 7. Added a ton of distance measures. 
     a. Added them to the testing pipeline as well
     b. Implemented the return correlation
-8. 
+8. Added feature importances
+    a. The static features have little overall importance, but they do have some (since there are so many features, any importance could be significant).
+9. 
     
