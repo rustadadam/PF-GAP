@@ -52,7 +52,6 @@ https://statrm.byu.edu/frontend/build
 # Week of April 29th
 
 ## Tasks
-3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc) instead of the proximities
 4. Look at weighting the static variables
 5. Do some feature importance tests
 
@@ -83,5 +82,6 @@ https://statrm.byu.edu/frontend/build
     b. To overcome this, I implemented a custom method. It now works, though we should talk through the process. 
 7. Added a ton of distance measures. 
     a. Added them to the testing pipeline as well
-    b.
+    b. Implemented the return correlation
+8. 
     
