@@ -35,7 +35,7 @@ class RFGAP_Rocket():
         self.rf_gap = RFGAP(prediction_type = prediction_type, oob_score = True)
 
         
-    def fit(self, X, y, static = None):
+    def fit(self, X, y, static=None, weights=None):
         """Fit the RFGAP Rocket Class.
 
         Parameters
@@ -48,17 +48,26 @@ class RFGAP_Rocket():
 
         static : array-like, shape (n_samples, n_static_features), optional
             The static features. The default is None.
-        """
 
-        #Transform the time series data using Rocket
+        weights : float, optional
+            The percentage weight to assign to static variables. Should be between 0 and 1.
+            If None, no weighting is applied. The default is None.
+        """
+        # Transform the time series data using Rocket
         self.rocket.fit(X)
         X_transformed = self.rocket.transform(X)
 
-        #Append Static features to the transformed data
+        # Append Static features to the transformed data
         if static is not None:
+            if weights is not None:
+                # Calculate the duplication factor to balance the feature proportions
+                time_series_size = X_transformed.shape[1]
+                static_size = static.shape[1]
+                duplication_factor = int((weights * time_series_size) / static_size)
+                static = np.tile(static, (1, duplication_factor))
             X_transformed = np.concatenate((X_transformed, static), axis=1)
 
-        #Fit the RFGAP model
+        # Fit the RFGAP model
         self.rf_gap.fit(X_transformed, y)
 
     def get_proximities(self):
@@ -87,4 +96,3 @@ class RFGAP_Rocket():
 
         #Predict using the RFGAP model
         return self.rf_gap.predict(X_transformed)
-        
