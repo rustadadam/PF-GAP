@@ -51,11 +51,6 @@ https://statrm.byu.edu/frontend/build
 
 # Week of April 29th
 
-## Tasks
-4. Look at weighting the static variables
-5. Do some feature importance tests
-
-
 ## Possibilities to expand the project
 1. New distances measures for PF-GAP
     1. Maybe using a regression adaptation.
