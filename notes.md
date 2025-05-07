@@ -54,6 +54,7 @@ https://statrm.byu.edu/frontend/build
 ## Tasks
 3. Look at the differing distance measures (DTW - Parralell, Euclidean, return correlation ,etc) instead of the proximities
 4. Look at weighting the static variables
+5. Do some feature importance tests
 
 
 ## Possibilities to expand the project
@@ -80,5 +81,7 @@ https://statrm.byu.edu/frontend/build
 6. Successfully uncorrupted the requirements file that FreshPrince works
     a. Needs implementation still: Difficulties -> "RotationForestClassifier is designed to use decision trees as base estimators, but it applies PCA transformations to subsets of the features before training the trees. This transformation makes it non-trivial to directly access the leaf indices of the trees because the input data is altered before being passed to the trees."
     b. To overcome this, I implemented a custom method. It now works, though we should talk through the process. 
-
+7. Added a ton of distance measures. 
+    a. Added them to the testing pipeline as well
+    b.
     
