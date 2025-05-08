@@ -84,3 +84,14 @@ https://statrm.byu.edu/frontend/build
 9. Added Static-feature weighting to RF-Rocket
     a. Applied weights to static features. It doesn't seem to make much of a difference. 
     
+
+
+# Week of May something
+
+## Tasks
+1. Implement time series directly to forest
+2. TODO: Fix the mds of the stock - data
+    a. Test just the estimator accuracy
+3. CHECK OOB scores for scoring: RandomForest Clasifier, ExtraTrees classifier, etc  (oob_score=True, # TODO: CHECK TO MAKE SURE THIS DOENST ERROR)
+4. Make sure that the model is predicting accurately. 
+
