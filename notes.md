@@ -63,16 +63,17 @@ https://statrm.byu.edu/frontend/build
 1. Fixed PFGAP to work in the pipeline
     a. Built a wrapper class to fit and things
     b. It does use the train data as the test data -> This doesn't effect the proximities though, right?
-2. Created the labels. NOTE: there are a few that have missing values... I wonder if the file I have has been corrupted
-3. Retrieved the proximities with the data across all five models
-    a. To Note: PF-GAP is significantly slower to the point its really bad. 
-    b. Implemented the Static feature application
+2. Created the labels from the data that was provided. NOTE: there are a few that have missing values... I wonder if the file I have has been corrupted. 
+3. Retrieved the proximities with the provided data from BlackRock across all five models
+    a. To Note: PF-GAP is significantly slower - (It took an hour and a half to run what the other models did in about 2 minutes) 
+    b. Implemented the Static features to got the proximities with the provided data.
 4. Implemented the K-fold validation tests
     a. NOTE: None of the methods to validate this are "KOSHER" - meaning they all kind of cheat in their own ways. To avoid this, we can do the rf-extend approach here, though we would have to implement this all the way from the beggining manually because of the nature of transforming the features with the proximity models we use.
     b. The cheater scores look good 
     c. The MDS visualizations look terrible. Did a K-Clustering algorithm to verify if results are optimal. They aren't. PCA is better though.
-5. Got time_series_forest to work in a partial way
-6. Successfully uncorrupted the requirements file that FreshPrince works
+5. Got time_series_forest to work in a partial way (meaning that it returns proximities, but that it returns way too many nan's and doesn't aggregate the different models in the right way)
+    a. I'm thinking we can just ignore this method
+6. Successfully uncorrupted the requirements file so that FreshPrince works
     a. Needs implementation still: Difficulties -> "RotationForestClassifier is designed to use decision trees as base estimators, but it applies PCA transformations to subsets of the features before training the trees. This transformation makes it non-trivial to directly access the leaf indices of the trees because the input data is altered before being passed to the trees."
     b. To overcome this, I implemented a custom method. It now works, though we should talk through the process. 
 7. Added a ton of distance measures. 
