@@ -174,6 +174,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                     n_estimators=200,
                     max_features=0.1,
                     criterion="entropy",
+                    bootstrap=True,
                     oob_score=True, # TODO: CHECK TO MAKE SURE THIS DOENST ERROR
                     class_weight=self.class_weight,
                     random_state=self.random_state,
