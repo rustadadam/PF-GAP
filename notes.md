@@ -89,9 +89,19 @@ https://statrm.byu.edu/frontend/build
 # Week of May something
 
 ## Tasks
+0. Send the results to Black Rock
+    a. Check accuracies of the model
 1. Implement time series directly to forest
+    a. See the feature importance on this
 2. TODO: Fix the mds of the stock - data
     a. Test just the estimator accuracy
 3. CHECK OOB scores for scoring: RandomForest Clasifier, ExtraTrees classifier, etc  (oob_score=True, # TODO: CHECK TO MAKE SURE THIS DOENST ERROR)
 4. Make sure that the model is predicting accurately. 
+5. Test DTW and other distances accuracy
+6. Think about how much of the time-series matter
+    a. We want to know what part of the series matter the most
+        - Which part is contributing to the results the most?
+    
 
+From Ben:
+By the way, for DTW and Euclidean distances, you can get a classification accuracy like for the other models by using a 1-NN classifier. This is common in time series classification.
