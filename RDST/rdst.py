@@ -193,6 +193,8 @@ class RDST_GAP(RDSTClassifier, ProximityMixin):
                     criterion="entropy",
                     class_weight=self.class_weight,
                     random_state=self.random_state,
+                    bootstrap=True,
+                    oob_score=True # TODO: CHECK TO MAKE SURE THIS DOENST ERROR
                 )
                 if self.estimator is None
                 else self.estimator
