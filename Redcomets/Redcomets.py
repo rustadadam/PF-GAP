@@ -147,7 +147,7 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
         col_diff = X.shape[0] - static.shape[0]
         if col_diff > 0:  # Test this for many different cases
             # Identify the minority class
-            unique, counts = np.unique(self.static[:, -1], return_counts=True)
+            unique, counts = np.unique(static[:, -1], return_counts=True)
             minority_class = unique[np.argmin(counts)]
             
             # Clone rows belonging to the minority class
@@ -324,6 +324,8 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
                 n_estimators=self.n_trees,
                 random_state=self.random_state,
                 n_jobs=self.n_jobs,
+                bootstrap=True,
+                oob_score=True,  # Ensure OOB score is enabled
             )
             rf.fit(X_sfa, y_smote)
 
@@ -347,10 +349,13 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
         for X_sax in self._parallel_sax(sax_transforms, X_smote):
             if self.static is not None:
                 X_sax = np.hstack([X_sax, self._prepare_static(X_sax)])
+
             rf = RandomForestClassifier(
                 n_estimators=self.n_trees,
                 random_state=self.random_state,
                 n_jobs=self.n_jobs,
+                oob_score=True,
+                bootstrap=True,# Ensure OOB score is enabled
             )
             rf.fit(X_sax, y_smote)
 
@@ -778,6 +783,49 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
         aggregated = sum(prox * w for prox, w in zip(proximities_list, weights_list)) / total_weight
         return aggregated
     
+    def get_ensemble_oob_score(self, group: str = "all") -> float:
+        """
+        Compute the aggregated out-of-bag (OOB) score for the ensemble of random forests.
+
+        Parameters
+        ----------
+        group : str, default="all"
+            Which model group to use: "sfa", "sax", or "all" (aggregates both).
+
+        Returns
+        -------
+        float
+            The aggregated OOB score computed as the weighted average of OOB scores
+            from the ensemble models.
+
+        Note
+        ----
+        This method assumes that the individual random forests have been trained with
+        `oob_score=True`.
+        """
+        oob_scores = []
+        weights = []
+
+        if group in ("sfa", "all"):
+            for (rf, weight) in self.sfa_clfs:
+                if hasattr(rf, "oob_score_"):
+                    oob_scores.append(rf.oob_score_)
+                    weights.append(weight if weight is not None else 1)
+
+        if group in ("sax", "all"):
+            for (rf, weight) in self.sax_clfs:
+                if hasattr(rf, "oob_score_"):
+                    oob_scores.append(rf.oob_score_)
+                    weights.append(weight if weight is not None else 1)
+
+        if not oob_scores:
+            raise ValueError("No OOB scores available for group: " + group)
+
+        # Weighted average of OOB scores
+        total_weight = sum(weights)
+        aggregated_oob_score = sum(score * w for score, w in zip(oob_scores, weights)) / total_weight
+        return aggregated_oob_score
+
     @classmethod
     def _get_test_params(cls, parameter_set="default"):
         """Return testing parameter settings for the estimator.
