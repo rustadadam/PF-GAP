@@ -86,7 +86,7 @@ https://statrm.byu.edu/frontend/build
     
 
 
-# Week of May something
+# Week of May 5th
 
 ## Tasks
 0. Send the results to Black Rock
@@ -105,3 +105,12 @@ https://statrm.byu.edu/frontend/build
 
 From Ben:
 By the way, for DTW and Euclidean distances, you can get a classification accuracy like for the other models by using a 1-NN classifier. This is common in time series classification.
+
+## Changes and Updates
+1. Fixed missing data errors by manually filling them in. 
+    a. Saved the data files for future ease of use. 
+    b. Additionally, I also stored the prox files genereated by the classes. 
+2. Adapted QUANT to store the QGAP scores. 
+    a. It reaches around 60%, which seems more likely for ten classes.
+3. Wrote file to predict the time-series distances and save the numpy files. 
+4. 
