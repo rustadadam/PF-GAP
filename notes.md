@@ -112,4 +112,4 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     a. It reaches around 60%, which seems more likely for ten classes.
     b. REDCOMETS scores the highest.
 3. Wrote file to predict the time-series distances and save the numpy files. 
-4. 
+4. Added just a forest method by itself for the predictions. 
