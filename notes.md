@@ -113,3 +113,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     b. REDCOMETS scores the highest.
 3. Wrote file to predict the time-series distances and save the numpy files. 
 4. Added just a forest method by itself for the predictions. 
+    a. Acheived a high OOB score. 
+    b. Got the test score using data from another year. Got less accuracy, but still 70%
+    
