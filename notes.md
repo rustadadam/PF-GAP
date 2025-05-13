@@ -89,8 +89,6 @@ https://statrm.byu.edu/frontend/build
 # Week of May 5th
 
 ## Tasks
-0. Send the results to Black Rock
-    a. Check accuracies of the model
 1. Implement time series directly to forest
     a. See the feature importance on this
 2. TODO: Fix the mds of the stock - data
