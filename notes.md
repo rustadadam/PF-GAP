@@ -100,6 +100,8 @@ https://statrm.byu.edu/frontend/build
     a. We want to know what part of the series matter the most
         - Which part is contributing to the results the most?
     
+## Possibilities to expand the project
+1. Using an imputation method to classify the NaNs and the following. 
 
 From Ben:
 By the way, for DTW and Euclidean distances, you can get a classification accuracy like for the other models by using a 1-NN classifier. This is common in time series classification.
