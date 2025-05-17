@@ -108,6 +108,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 1. Fixed missing data errors by manually filling them in. 
     a. Saved the data files for future ease of use. 
     b. Additionally, I also stored the prox files genereated by the classes. 
+    c. Returned this to just dropping the files
 2. Adapted QUANT and all other models to store the OOB scores. 
     a. It reaches around 60%, which seems more likely for ten classes.
     b. REDCOMETS scores the highest.
