@@ -847,3 +847,29 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
             "variant": 3,
             "n_trees": 3,
         }
+    
+    def predict(self, X, static=None):
+        """Predict class labels for samples in X, optionally using static features.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            3D np.ndarray of shape (n_cases, n_channels, n_timepoints)
+            The data to make predictions for.
+        static : array-like, default=None
+            Static features to use for prediction.
+
+        Returns
+        -------
+        y : np.ndarray
+            1D np.ndarray of shape (n_cases)
+            Predicted class labels.
+        """
+        if static is not None:
+            old_static = self.static
+            self.static = static
+            y_pred = self._predict(X)
+            self.static = old_static
+            return y_pred
+        else:
+            return self._predict(X)
