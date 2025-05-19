@@ -124,4 +124,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     a. Implemented function to automate process
     b. Now returns f1, and other scores
 6. Implemented RDST test accuracies in the test_accuracy file. 
+    a. Added a predict method to the class rdst_GAP
+    b.
     
