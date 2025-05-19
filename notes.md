@@ -89,16 +89,14 @@ https://statrm.byu.edu/frontend/build
 # Week of May 5th
 
 ## Tasks
-1. Implement time series directly to forest
-    a. See the feature importance on this
 2. TODO: Fix the mds of the stock - data
     a. Test just the estimator accuracy
-3. CHECK OOB scores for scoring: RandomForest Clasifier, ExtraTrees classifier, etc  (oob_score=True, # TODO: CHECK TO MAKE SURE THIS DOENST ERROR)
-4. Make sure that the model is predicting accurately. 
 5. Test DTW and other distances accuracy
 6. Think about how much of the time-series matter
     a. We want to know what part of the series matter the most
         - Which part is contributing to the results the most?
+7. Add FreshPrince to the testing Mix
+
     
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 
@@ -126,4 +124,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 6. Implemented RDST test accuracies in the test_accuracy file. 
     a. Added a predict method to the class rdst_GAP
 7. Also added QGAP K-fold tests
+8. Built out the Redcomets k-fold tests
     
