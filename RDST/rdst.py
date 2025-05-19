@@ -219,3 +219,23 @@ class RDST_GAP(RDSTClassifier, ProximityMixin):
         self.is_fitted = True
 
         return self
+
+    def predict(self, X, static=None):
+        """Predict class labels for samples in X, optionally using static features.
+
+        Parameters
+        ----------
+        X: np.ndarray shape (n_cases, n_channels, n_timepoints)
+            The input samples.
+        static: None or array-like, default=None
+            The static features for samples in X.
+
+        Returns
+        -------
+        y_pred : array
+            Predicted class labels.
+        """
+        X_t = self._transformer.transform(X)
+        if static is not None:
+            X_t = np.hstack([X_t, static])
+        return self._estimator.predict(X_t)
