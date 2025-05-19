@@ -125,4 +125,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     a. Added a predict method to the class rdst_GAP
 7. Also added QGAP K-fold tests
 8. Built out the Redcomets k-fold tests
+9. Added FreshPrince to the stock_data -> Created the correct proximities
+10. 
     
