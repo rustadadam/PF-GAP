@@ -125,5 +125,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     b. Now returns f1, and other scores
 6. Implemented RDST test accuracies in the test_accuracy file. 
     a. Added a predict method to the class rdst_GAP
-    b.
+7. Also added QGAP K-fold tests
     

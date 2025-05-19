@@ -578,4 +578,24 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 self.prox_predict_score = sklearn.metrics.mean_squared_error(y, prox_preds)
                 return prox_preds
 
+        def predict(self, X0, static=None):
+            """Predict using the fitted estimator, optionally using static features.
+
+            Parameters
+            ----------
+            X0 : array-like of shape (n_samples, n_features)
+                The input samples.
+            static : array-like of shape (n_samples, n_static_features), default=None
+                Static data to be added to the input samples.
+
+            Returns
+            -------
+            y_pred : array
+                Predicted values.
+            """
+            X = self._transformer.transform(X0)
+            if static is not None:
+                X = np.hstack([X, static])
+            return self._estimator.predict(X)
+
     return QGAP(prox_method = prox_method, matrix_type = matrix_type, triangular = triangular, **kwargs)
