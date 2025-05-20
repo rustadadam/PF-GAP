@@ -461,8 +461,15 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
             return self._predict_proba_unvivariate(np.squeeze(X))
         else:  # Multivariate
             if self.variant in [1, 2, 3]:  # Concatenate
-                X_concat = X.reshape(*X.shape[:-2], -1)
-                return self._predict_proba_unvivariate(X_concat)
+                if self.debug_mode:
+                    print(f"X shape before reshapping: {X.shape}")
+                    print("\n")
+
+                    if self.static is not None:
+                        print(f"Static shape: {self.static.shape}")
+                        print("\n")
+                #X_concat = X.reshape(*X.shape[:-2], -1) #This is original to the method. We don't want it.
+                return self._predict_proba_unvivariate(X)
             elif self.variant in [4, 5, 6, 7, 8, 9]:
                 return self._predict_proba_dimension_ensemble(X)  # Ensemble
 
@@ -481,7 +488,16 @@ class REDCOMETS(BaseClassifier, ProximityMixin):
             2D np.ndarray of shape (n_cases, n_classes_)
             Predicted probabilities using the ordering in ``classes_``.
         """
-        X = Normalizer().fit_transform(X).squeeze()
+
+        if self.debug_mode:
+            print(f"X shape: {X.shape}")
+            print("\n")
+
+            if self.static is not None:
+                print(f"Static shape: {self.static.shape}")
+                print("\n")
+        
+        X = Normalizer().fit_transform(X).squeeze() # Predict fails here?
 
         pred_mat = np.zeros((X.shape[0], self.n_classes_))
 
