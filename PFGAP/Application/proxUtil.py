@@ -50,6 +50,7 @@ def getProx(trainfile, testfile, getprox="true", savemodel="true", modelname="PF
         print("Subprocess finished successfully.")
     except subprocess.CalledProcessError as e:
         print("Error executing PFGAP.jar:", e)
+        raise RuntimeError("PFGAP execution failed.") from e
     return
     
 
