@@ -89,8 +89,6 @@ https://statrm.byu.edu/frontend/build
 # Week of May 5th
 
 ## Tasks
-2. TODO: Fix the mds of the stock - data
-    a. Test just the estimator accuracy
 5. Test DTW and other distances accuracy
 6. Think about how much of the time-series matter
     a. We want to know what part of the series matter the most
@@ -126,4 +124,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 8. Built out the Redcomets k-fold tests
 9. Added FreshPrince to the stock_data -> Created the correct proximities
     a. Additionally, added it to the k-folds tests
-    
+10. Added MDS prox file. This shows the similarities between classes.
+    a. Added PHATE and UMAP dimensionality techniques. They seem to be much more helpful. 
