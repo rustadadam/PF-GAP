@@ -95,7 +95,6 @@ https://statrm.byu.edu/frontend/build
 6. Think about how much of the time-series matter
     a. We want to know what part of the series matter the most
         - Which part is contributing to the results the most?
-7. Add FreshPrince to the testing Mix
 
     
 ## Possibilities to expand the project
@@ -126,5 +125,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 7. Also added QGAP K-fold tests
 8. Built out the Redcomets k-fold tests
 9. Added FreshPrince to the stock_data -> Created the correct proximities
-10. 
+    a. Additionally, added it to the k-folds tests
     
