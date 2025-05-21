@@ -126,3 +126,30 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     a. Additionally, added it to the k-folds tests
 10. Added MDS prox file. This shows the similarities between classes.
     a. Added PHATE and UMAP dimensionality techniques. They seem to be much more helpful. 
+
+# Week of May 21st
+
+## Tasks
+1. Test DTW and other distances accuracy
+2. Think about how much of the time-series matter
+    a. We want to know what part of the series matter the most
+        - Which part is contributing to the results the most?
+3. Get data from YAHOO finance
+    a. We want to test at different time-scales
+    b. Start with Hourly -> Then we can go more fine-grained if we want
+    c. Then also go to weekly and monthly
+    d. NOTE: Don't use return values. We want to use the percent returns / z-scores
+    e. We can linearly interpolate the missing values
+4. Add the KNN model tests onto the resulting proximities
+    a. We can put it into the model testing pipeline
+    b. If the KNN scores on the proximities are much higher than the OOB score than we may have a problem with how the proximities are being defined
+5. To investigate further -> we can visualize the the test points alongside the training points through our visualizations with PHATE and UMAP
+6. Train on all the data with optimized hyperparameters
+7. EXTRA TIME: how does this change with different ideas of creating proximities
+    a. Can change the argument to "original" and "OOB" and proximity type. 
+
+## Possibilities to expand the project
+1. Using an imputation method to classify the NaNs and the following. 
+
+From Ben:
+By the way, for DTW and Euclidean distances, you can get a classification accuracy like for the other models by using a 1-NN classifier. This is common in time series classification.
