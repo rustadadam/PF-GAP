@@ -194,7 +194,7 @@ class RDST_GAP(RDSTClassifier, ProximityMixin):
                     class_weight=self.class_weight,
                     random_state=self.random_state,
                     bootstrap=True,
-                    oob_score=True # TODO: CHECK TO MAKE SURE THIS DOENST ERROR
+                    oob_score=True 
                 )
                 if self.estimator is None
                 else self.estimator
