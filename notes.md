@@ -130,7 +130,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 # Week of May 21st
 
 ## Tasks
-1. Test DTW and other distances accuracy
+1. Test DTW and other distances accuracy 
 2. Think about how much of the time-series matter
     a. We want to know what part of the series matter the most
         - Which part is contributing to the results the most?
@@ -147,6 +147,9 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 6. Train on all the data with optimized hyperparameters
 7. EXTRA TIME: how does this change with different ideas of creating proximities
     a. Can change the argument to "original" and "OOB" and proximity type. 
+
+## Changes and updates
+
 
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 
