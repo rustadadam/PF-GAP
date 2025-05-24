@@ -310,6 +310,20 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
 
             return in_bag_matrix
 
+        def apply(self, X):
+            """Apply the fitted estimator to the data.
+
+            Parameters
+            ----------
+            X : array-like of shape (n_samples, n_features)
+                The input samples.
+
+            Returns
+            -------
+            leaf_indices : array-like of shape (n_samples, n_estimators)
+                The leaf indices of the trees in the forest.
+            """
+            return self._estimator.apply(X)
         def get_proximity_vector(self, ind):
 
             """This method produces a vector of proximity values for a given observation
