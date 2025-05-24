@@ -153,6 +153,9 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 3. Can get the test proximities now for the following functions
     a. Rocket
     b. RDST
+    c. Quant
+    d. Freshprince
+        -> The results seem similar. 
 4. Added a plotting function for the k-fold results
 5.
 
