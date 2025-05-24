@@ -464,7 +464,7 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
             else:
                 return prox_sparse
 
-        def prox_extend(self, data):
+        def prox_extend(self, X, static=None):
             """Method to compute proximities between the original training 
             observations and a set of new observations.
 
@@ -482,7 +482,10 @@ def QGAP(prediction_type = None, y = None, prox_method = 'rfgap',
                 (if self.matrix_type == `sparse`) a sparse crs_matrix of pair-wise proximities
                 between the training data and the new observations
             """
-            check_is_fitted(self)
+            data = self._transformer.transform(X)
+            if static is not None:
+                data = np.hstack([data, static])
+
             n, num_trees = self.leaf_matrix.shape
             extended_leaf_matrix = self.apply(data)
             n_ext, _ = extended_leaf_matrix.shape
