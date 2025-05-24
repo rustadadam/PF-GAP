@@ -1,4 +1,6 @@
 import numpy as np
+from scipy import sparse
+
 import matplotlib.pyplot as plt
 from sklearn.utils.validation import check_is_fitted
 from distutils.version import LooseVersion
@@ -50,6 +52,103 @@ def getOutlierScores(proxArray, ytrain):
     return Scores
 
 class ProximityMixin:
+    def prox_extend(self, data):
+            """Method to compute proximities between the original training 
+            observations and a set of new observations.
+
+            Parameters
+            ----------
+            data : (n_samples, n_features) array_like (numeric)
+            
+            Returns
+            -------
+            array-like
+                (if self.matrix_type == `dense`) matrix of pair-wise proximities between
+                the training data and the new observations
+
+            csr_matrix
+                (if self.matrix_type == `sparse`) a sparse crs_matrix of pair-wise proximities
+                between the training data and the new observations
+            """
+            check_is_fitted(self)
+            n, num_trees = self.leaf_matrix.shape
+            extended_leaf_matrix = self.apply(data)
+            n_ext, _ = extended_leaf_matrix.shape
+
+            prox_vals = []
+            rows = []
+            cols = []
+
+            if self.prox_method == 'oob':
+
+                for ind in range(n):
+
+                    ind_oob_leaves = np.nonzero(self.oob_leaves[ind, :])[0]
+
+                    tree_counts = np.sum(self.oob_indices[ind, ind_oob_leaves] == np.ones_like(extended_leaf_matrix[:, ind_oob_leaves]), axis = 1)
+                    tree_counts[tree_counts == 0] = 1
+
+                    prox_counts = np.sum(self.oob_leaves[ind, ind_oob_leaves]  == extended_leaf_matrix[:, ind_oob_leaves], axis = 1)
+                    prox_vec = np.divide(prox_counts, tree_counts)
+
+                    cols_temp = np.nonzero(prox_vec)[0]
+                    rows_temp = np.ones(len(cols_temp), dtype = int) * ind
+                    prox_temp = prox_vec[cols_temp] 
+
+
+                    cols.extend(cols_temp)
+                    rows.extend(rows_temp)
+                    prox_vals.extend(prox_temp)
+
+
+
+            elif self.prox_method == 'original':
+
+                for ind in range(n):
+
+                    tree_inds = self.leaf_matrix[ind, :]
+                    prox_vec  = np.sum(tree_inds == extended_leaf_matrix, axis = 1)
+
+                    cols_temp = np.nonzero(prox_vec)[0]
+                    rows_temp = np.ones(len(cols_temp), dtype = int) * ind
+                    prox_temp = prox_vec[cols_temp] / num_trees
+
+                    cols.extend(cols_temp)
+                    rows.extend(rows_temp)
+                    prox_vals.extend(prox_temp)
+
+            elif self.prox_method == 'rfgap':
+  
+                for ind in range(n_ext):
+
+                    oob_terminals = extended_leaf_matrix[ind, :] 
+
+                    matches = oob_terminals == self.in_bag_leaves
+                    matched_counts = np.where(matches, self.in_bag_counts, 0)
+
+                    ks = np.sum(matched_counts, axis = 0)
+                    ks[ks == 0] = 1
+
+                    prox_vec = np.sum(np.divide(matched_counts, ks), axis = 1) / num_trees
+
+                    cols_temp = np.nonzero(prox_vec)[0]
+                    rows_temp = np.ones(len(cols_temp), dtype = int) * ind
+                    prox_temp = prox_vec[cols_temp]
+
+                    cols.extend(rows_temp)
+                    rows.extend(cols_temp)
+                    prox_vals.extend(prox_temp)
+
+
+            prox_sparse = sparse.csr_matrix((np.array(prox_vals), (np.array(cols), np.array(rows))), shape = (n_ext, n))
+
+            if self.matrix_type == 'dense':
+                return prox_sparse.todense() 
+            else:
+                return prox_sparse
+            
+
+        
 
     def _get_oob_samples(self, data):
         
@@ -137,6 +236,21 @@ class ProximityMixin:
 
 
         return in_bag_matrix
+    
+    def apply(self, X):
+        """Apply the fitted estimator to the data and return the leaf indices.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            The input data.
+
+        Returns
+        -------
+        leaf_indices : array-like, shape (n_samples, n_estimators)
+            The indices of the leaves for each tree in the forest.
+        """
+        return self._estimator.apply(X)
 
     def prox_fit(self, X, x_test = None):
         self.leaf_matrix = self._estimator.apply(X)
