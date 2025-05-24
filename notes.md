@@ -152,7 +152,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 2. Created hourly returns with percent changes and included labels and removed missing values
 3. Can get the test proximities now for the following functions
     a. Rocket
-    
+    b. RDST
 
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 
