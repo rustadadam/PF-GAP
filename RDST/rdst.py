@@ -239,3 +239,28 @@ class RDST_GAP(RDSTClassifier, ProximityMixin):
         if static is not None:
             X_t = np.hstack([X_t, static])
         return self._estimator.predict(X_t)
+    
+    def extend_prox(self, X_test, static=None):
+        """Get the proximities for the test data.
+
+        Parameters
+        ----------
+        X_test : np.ndarray shape (n_cases, n_channels, n_timepoints)
+            The test data.
+        static: None or array-like, default=None
+            The static features for samples in X.
+
+        Returns
+        -------
+        np.ndarray
+            The proximities for the test data.
+        """
+        # Transform the time series data using Rocket
+        X_test_transformed = self._transformer.transform(X_test)
+
+        # Append Static features to the transformed data
+        if static is not None:
+            X_test_transformed = np.hstack([X_test_transformed, static])
+
+        # Get the proximities for the test data
+        return self.prox_extend(X_test_transformed)

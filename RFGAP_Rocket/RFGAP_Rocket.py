@@ -94,7 +94,7 @@ class RFGAP_Rocket():
             x_test_transformed = np.concatenate((x_test_transformed, static), axis=1)
 
         # Get the proximities for the test data
-        return self.rf_gap.get_test_proximities(x_test_transformed)
+        return self.rf_gap.prox_extend(x_test_transformed)
     
     def predict(self, X, static = None):
         """Predict using the RFGAP Rocket Class.
