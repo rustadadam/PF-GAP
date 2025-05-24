@@ -150,7 +150,9 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 ## Changes and updates
 1. Tested the accuracy of the straight up distance measures. They seem to get better accuracy than the other models do. This is in test_accuracy file
 2. Created hourly returns with percent changes and included labels and removed missing values
-3. 
+3. Can get the test proximities now for the following functions
+    a. Rocket
+    
 
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 
