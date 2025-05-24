@@ -147,9 +147,6 @@ class ProximityMixin:
             else:
                 return prox_sparse
             
-
-        
-
     def _get_oob_samples(self, data):
         
         """This is a helper function for get_oob_indices. 

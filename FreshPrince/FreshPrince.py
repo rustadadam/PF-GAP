@@ -231,3 +231,35 @@ class FreshPRINCE_GAP(FreshPRINCEClassifier, ProximityMixin):
 
         # Use the fitted estimator to predict
         return self._estimator.predict(X_t)
+
+    def get_extend(self, X, static=None):
+        """
+        Predict class labels for samples in X, optionally using static features.
+
+        Parameters
+        ----------
+        X : 3D or 2D np.ndarray
+            The input data shape = (n_cases, n_channels, n_timepoints) or (n_cases, n_timepoints).
+        static : None or array-like, default=None
+            The static features for samples in X.
+
+        Returns
+        -------
+        y_pred : np.ndarray
+            Predicted class labels.
+        """
+        # Add case where channels is missing
+        if X.ndim == 2:
+            X = np.expand_dims(X, axis=1)
+        elif X.ndim != 3:
+            raise ValueError(f"X must be 2D or 3D, but got {X.ndim} dimensions.")
+
+        # Transform X using the fitted TSFresh transformer
+        X_t = self._tsfresh.transform(X)
+
+        # Add static data to X_t if provided
+        if static is not None:
+            X_t = np.hstack([X_t, static])
+
+        # Use the fitted estimator to predict
+        return self.prox_extend(X_t)
