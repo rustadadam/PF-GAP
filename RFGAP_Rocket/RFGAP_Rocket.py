@@ -73,6 +73,29 @@ class RFGAP_Rocket():
     def get_proximities(self):
         return self.rf_gap.get_proximities()
     
+    def get_test_proximities(self, x_test: np.ndarray, static: np.ndarray = None):
+        """Get the proximities for the test data.
+
+        Parameters
+        ----------
+        x_test : np.ndarray
+            The test data.
+
+        Returns
+        -------
+        np.ndarray
+            The proximities for the test data.
+        """
+        # Transform the time series data using Rocket
+        x_test_transformed = self.rocket.transform(x_test)
+
+        # Append Static features to the transformed data
+        if static is not None:
+            x_test_transformed = np.concatenate((x_test_transformed, static), axis=1)
+
+        # Get the proximities for the test data
+        return self.rf_gap.get_test_proximities(x_test_transformed)
+    
     def predict(self, X, static = None):
         """Predict using the RFGAP Rocket Class.
 
