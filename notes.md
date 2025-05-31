@@ -130,18 +130,12 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 # Week of May 21st
 
 ## Tasks
-2. Think about how much of the time-series matter
-    a. We want to know what part of the series matter the most
-        - Which part is contributing to the results the most?
 3. Get data from YAHOO finance
     a. We want to test at different time-scales
     b. Start with Hourly -> Then we can go more fine-grained if we want
     c. Then also go to weekly and monthly
     d. NOTE: Don't use return values. We want to use the percent returns / z-scores
     e. We can linearly interpolate the missing values
-4. Add the KNN model tests onto the resulting proximities
-    a. We can put it into the model testing pipeline
-    b. If the KNN scores on the proximities are much higher than the OOB score than we may have a problem with how the proximities are being defined
 5. To investigate further -> we can visualize the the test points alongside the training points through our visualizations with PHATE and UMAP
 6. Train on all the data with optimized hyperparameters
 7. EXTRA TIME: how does this change with different ideas of creating proximities
@@ -150,14 +144,18 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 ## Changes and updates
 1. Tested the accuracy of the straight up distance measures. They seem to get better accuracy than the other models do. This is in test_accuracy file
 2. Created hourly returns with percent changes and included labels and removed missing values
+    a. Ran tests with Hourly scores. They are different that the yearly. Redcommets did a little better, and Rocket did a little worse.
 3. Can get the test proximities now for the following functions
     a. Rocket
     b. RDST
     c. Quant
     d. Freshprince
-        -> The results seem similar. 
+
+The KNN results seem similar (or often smaller than) the RF test results, which is similar to the OOB (though I didn't save these). 
+
 4. Added a plotting function for the k-fold results
-5.
+5. Sent the task of retreiving SHAP values to Kelvyn
+6. 
 
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 
