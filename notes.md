@@ -145,6 +145,8 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 1. Tested the accuracy of the straight up distance measures. They seem to get better accuracy than the other models do. This is in test_accuracy file
 2. Created hourly returns with percent changes and included labels and removed missing values
     a. Ran tests with Hourly scores. They are different that the yearly. Redcommets did a little better, and Rocket did a little worse.
+    b. It feels similar to having the different time_scopes
+    c. Updated the visuals to demonstrate the hourly visuals as well
 3. Can get the test proximities now for the following functions
     a. Rocket
     b. RDST
