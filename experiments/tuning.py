@@ -76,7 +76,20 @@ def get_fresh_pred(X_train, y_train, X_test, static_train, static_test, params):
     return fp.predict(X_test, static = static_test)
     
 
-def evaluate_params(get_predictions_method, params, X, y, static):
+def determine_static(fold):
+    if fold < 2:
+        static_train = static2022
+        static_test = static2023
+    elif fold < 4:
+        static_train = static2023
+        static_test = static2024
+    else:
+        static_train = static2024
+        static_test = static2025
+
+    return np.array(static_train), np.array(static_test)
+
+def evaluate_params(get_predictions_method, params, X, y):
     """
     Evaluates the performance of a model with given parameters using cross-validation.
     """
@@ -86,8 +99,7 @@ def evaluate_params(get_predictions_method, params, X, y, static):
         # Get the train and test splits
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
-        static_train = static[train_idx] if static is not None else None
-        static_test = static[test_idx] if static is not None else None
+        static_train, static_test = determine_static(2)
 
         y_pred = get_predictions_method(X_train, y_train, X_test, static_train[train_idx], static_test[test_idx], params)
 
@@ -99,7 +111,7 @@ def evaluate_params(get_predictions_method, params, X, y, static):
 
 #? Full Method
 
-def grid_search_models(model_dict, X, y, static=None):
+def grid_search_models(model_dict, X, y):
     """
     Performs grid search for hyperparameter optimization on multiple models.
     
@@ -119,7 +131,7 @@ def grid_search_models(model_dict, X, y, static=None):
         # Get the correct function to test the model
         get_predictions_method = globals().get(f"get_{model_name.lower()}_pred")
 
-        best_score = evaluate_params(get_predictions_method, params_dict["default"], X, y, static)
+        best_score = evaluate_params(get_predictions_method, params_dict["default"], X, y)
 
         print(f"#* -------> Initial score for {model_name} with default parameters: {best_score}")
 
@@ -139,7 +151,7 @@ def grid_search_models(model_dict, X, y, static=None):
                 params[param_name] = param_value
                 
                 # Evaluate the model with the current parameters
-                score = evaluate_params(get_predictions_method, params, X, y, static)
+                score = evaluate_params(get_predictions_method, params, X, y)
                 
                 print(f"#?      -------> Score: {score}")
 
@@ -177,3 +189,4 @@ labels = pd.read_csv('../data/labels.csv')
 labels = np.array(labels).flatten()
 
 #* Run the grid search
+grid_search_models(model_dict, time_series, labels, static=static2024)
