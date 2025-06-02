@@ -14,10 +14,7 @@ from Redcomets.Redcomets import REDCOMETS
 from FreshPrince.FreshPrince import FreshPRINCE_GAP
 
 
-
-
-
-def save_optimized_parameters(param_dict, save_path):
+def save_optimized_parameters(param_dict, model_name, save_path = "../data/opimized_models/"):
     """
     Saves the optimized parameters for each model to a JSON file.
 
@@ -25,6 +22,8 @@ def save_optimized_parameters(param_dict, save_path):
         param_dict (dict): Dictionary where keys are model names (str) and values are parameter dicts.
         save_path (str): Path to save the JSON file.
     """
+    save_path = os.path.join(save_path, f"{model_name}_optimized_params.json")
+
     try:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         with open(save_path, 'w') as f:
@@ -74,60 +73,103 @@ def get_fresh_pred(X_train, y_train, X_test, static_train, static_test, params):
     fp.fit(X_train, y_train, static = static_train)
     return fp.predict(X_test, static = static_test)
     
+
+def evaluate_params(get_predictions_method, params, X, y, static):
+    """
+    Evaluates the performance of a model with given parameters using cross-validation.
+    """
+    skf = StratifiedKFold(n_splits=2, shuffle=True, random_state=42)
+    scores = []
+    for train_idx, test_idx in skf.split(X, y):
+        # Get the train and test splits
+        X_train, X_test = X[train_idx], X[test_idx]
+        y_train, y_test = y[train_idx], y[test_idx]
+        static_train = static[train_idx] if static is not None else None
+        static_test = static[test_idx] if static is not None else None
+
+        y_pred = get_predictions_method(X_train, y_train, X_test, static_train[train_idx], static_test[test_idx], params)
+
+
+        scores.append(f1_score(y_test, y_pred, average='weighted'))
     
-    
+    return np.mean(scores)
+
 
 #? Full Method
 
-def grid_search_models(models, param_grids, X, y, static=None, n_jobs=-1, cv=3, scoring='accuracy'):
+def grid_search_models(model_dict, X, y, static=None):
     """
-    Performs grid search for each model using joblib parallelization.
-
+    Performs grid search for hyperparameter optimization on multiple models.
+    
     Args:
-        models (dict): Model name -> model class (not instance).
-        param_grids (dict): Model name -> list of parameter dicts to try.
-        X (np.ndarray): Feature data.
-        y (np.ndarray): Labels.
-        static (np.ndarray or None): Static data if required by models.
-        n_jobs (int): Number of parallel jobs.
-        cv (int): Number of cross-validation folds.
-
+        model_dict (dict): Dictionary where keys are model names and values are tuples containing
+                           the function to get predictions and a dictionary of hyperparameters.
+    
     Returns:
-        dict: Model name -> best parameter dict.
+        dict: Dictionary with optimized parameters for each model.
     """
-    def evaluate_params(get_predictions_method, params, X, y, static, cv):
-        skf = StratifiedKFold(n_splits=cv, shuffle=True, random_state=42)
-        scores = []
-        for train_idx, test_idx in skf.split(X, y):
-            X_train, X_test = X[train_idx], X[test_idx]
-            y_train, y_test = y[train_idx], y[test_idx]
-            static_train = static[train_idx] if static is not None else None
-            static_test = static[test_idx] if static is not None else None
+    optimized_params = {}
 
-            #! This is a placeholder for model instantiation, adjust as needed
-            y_pred = get_predictions_method(X_train, y_train, X_test, static_train[train_idx], static_test[test_idx])
+    for model_name, params_dict in model_dict.items():
+        print(f"Optimizing parameters for {model_name}...")
 
+        saved_params = params_dict["default"]
 
-            f1 = f1_score(y_test, y_pred, average='weighted')
-            return f1
+        # Get the correct function to test the model
+        get_predictions_method = globals().get(f"get_{model_name.lower()}_pred")
 
-    best_params = {}
-    for model_name, model_class in models.items():
-        grid = param_grids[model_name]
-        static_data = static.get(model_name) if isinstance(static, dict) else static
-        results = Parallel(n_jobs=n_jobs)(
-            delayed(evaluate_params)(model_class, params, X, y, static_data, cv, scoring)
-            for params in grid
-        )
-        best_idx = int(np.argmax(results))
-        best_params[model_name] = grid[best_idx]
-        print(f"{model_name}: Best params {grid[best_idx]} with score {results[best_idx]:.4f}")
-    return best_params
+        best_score = evaluate_params(get_predictions_method, params_dict["default"], X, y, static)
 
-# Example usage:
-# optimized_params = {
-#     "REDCOMETS": {"param1": 0.1, "param2": 10},
-#     "QGAP": {"paramA": 5, "paramB": 0.01},
-#     "RDST": {"alpha": 0.5, "beta": 2}
-# }
-# save_optimized_parameters(optimized_params, "/yunity/arusty/PF-GAP/experiments/optimized_params.json")
+        print(f"#* -------> Initial score for {model_name} with default parameters: {best_score}")
+
+        # Loop through each parameter and save the best performing one
+        for param_name, param_values in params_dict.items():
+
+            # Skip the default parameter as it is already set
+            if param_name == "default":
+                continue
+            
+            # Loop through each value of the parameter
+            for param_value in param_values:
+                print(f"#? -------> Testing {model_name} with {param_name}={param_value}...")
+
+                # Create a copy of the parameters and set the current parameter value
+                params = saved_params.copy()
+                params[param_name] = param_value
+                
+                # Evaluate the model with the current parameters
+                score = evaluate_params(get_predictions_method, params, X, y, static)
+                
+                print(f"#?      -------> Score: {score}")
+
+                # Update the best score and parameter if this one is better
+                if score > best_score:
+                    best_score = score
+                    saved_params = params
+                    print(f"#!          -------> New best score. Parameters updated: {saved_params}")
+            
+        # Save the best parameter for this model
+        optimized_params[model_name] = saved_params
+        
+    
+
+model_dict = {
+    "REDCOMETS": {
+        "default" : {"perc_length": 5, "n_trees": 100},
+        "perc_length": [0.1, 0.3, 0.7, 0.9, 1],
+        "n_trees": [10, 50, 150, 200],
+    }
+}
+
+#* Import data
+import sys 
+import pandas as pd
+sys.path.insert(0, '/yunity/arusty/PF-GAP')
+
+static2024 = pd.read_csv('../data/static2024.csv')
+static2023 = pd.read_csv('../data/static2023.csv')
+static2022 = pd.read_csv('../data/static2022.csv')
+static2025 = pd.read_csv('../data/static2025.csv')
+time_series = np.array(pd.read_csv('../data/time_series.csv'))
+labels = pd.read_csv('../data/labels.csv')
+labels = np.array(labels).flatten()
