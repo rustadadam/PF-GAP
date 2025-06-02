@@ -18,7 +18,7 @@ from FreshPrince.FreshPrince import FreshPRINCE_GAP
 
 print("Imports done.")
 
-def save_optimized_parameters(param_dict, model_name, score, save_path = "../data/opimized_models/"):
+def save_optimized_parameters(param_dict, model_name, score, save_path = "data/opimized_models/"):
     """
     Saves the optimized parameters for each model to a JSON file.
 
