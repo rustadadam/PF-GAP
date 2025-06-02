@@ -11,6 +11,7 @@ from RFGAP_Rocket.RFGAP_Rocket import RFGAP_Rocket
 from RDST.rdst import RDST_GAP
 from QGAP.qgap import QGAP
 from Redcomets.Redcomets import REDCOMETS
+from FreshPrince.FreshPrince import FreshPRINCE_GAP
 
 
 
@@ -61,11 +62,18 @@ def get_qgap_pred(X_train, y_train, X_test, static_train, static_test, params):
 def get_redcomets_pred(X_train, y_train, X_test, static_train, static_test, params):
     rc = REDCOMETS(static = static_train, variant=3,
                    perc_length=params["perc_length"], # Percentage of time series length to use
-                   n_trees=params["n_trees"] # Number of trees in the forest
-                   )
+                   n_trees=params["n_trees"], # Number of trees in the forest
+                   random_state=42)
     rc.fit(X_train, y_train)
     return rc.predict(X_test, static = static_test)
 
+def get_fresh_pred(X_train, y_train, X_test, static_train, static_test, params):
+    fp = FreshPRINCE_GAP(default_fc_parameters=params["default_fc_parameters"], # "minimal", "efficient", "comprehensive"
+                         n_estimators=params["n_estimators"] # Number of estimators for the rotation forest ensemble
+                         )
+    fp.fit(X_train, y_train, static = static_train)
+    return fp.predict(X_test, static = static_test)
+    
     
     
 
