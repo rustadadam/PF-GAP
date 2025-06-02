@@ -40,7 +40,7 @@ def save_optimized_parameters(param_dict, model_name, score, save_path = "data/o
 
 #? Methods to retrieve predictions and proximities for different models
 def get_rocket_pred(X_train, y_train, X_test, static_train, static_test, params):
-    rocket = RFGAP_Rocket(prediction_type = params["prediction_type"], # Classification or Regression
+    rocket = RFGAP_Rocket(prediction_type = "Classification", # Classification or Regression
                            rocket = params["rocket"], # Rocket or MultiRocket
                          n_kernels=params["n_kernels"]) # 512 or other integers
     
@@ -79,7 +79,6 @@ def get_fresh_pred(X_train, y_train, X_test, static_train, static_test, params):
     fp.fit(X_train, y_train, static = static_train)
     return fp.predict(X_test, static = static_test)
     
-
 def determine_static(fold):
     if fold < 2:
         static_train = static2022
@@ -97,24 +96,26 @@ def evaluate_params(get_predictions_method, params, X, y):
     """
     Evaluates the performance of a model with given parameters using cross-validation.
     """
-    skf = StratifiedKFold(n_splits=2, shuffle=True, random_state=42)
-    scores = []
-    for train_idx, test_idx in skf.split(X, y):
-        # Get the train and test splits
-        X_train, X_test = X[train_idx], X[test_idx]
-        y_train, y_test = y[train_idx], y[test_idx]
-        static_train, static_test = determine_static(2)
+    try:
+        skf = StratifiedKFold(n_splits=2, shuffle=True, random_state=42)
+        scores = []
+        for train_idx, test_idx in skf.split(X, y):
+            # Get the train and test splits
+            X_train, X_test = X[train_idx], X[test_idx]
+            y_train, y_test = y[train_idx], y[test_idx]
+            static_train, static_test = determine_static(2)
 
-        y_pred = get_predictions_method(X_train, y_train, X_test, static_train[train_idx], static_test[test_idx], params)
+            y_pred = get_predictions_method(X_train, y_train, X_test, static_train[train_idx], static_test[test_idx], params)
 
 
-        scores.append(f1_score(y_test, y_pred, average='weighted'))
-    
-    return np.mean(scores)
-
+            scores.append(f1_score(y_test, y_pred, average='weighted'))
+        
+        return np.mean(scores)
+    except Exception as e:
+        print(f"Error evaluating parameters: {e}")
+        return 0
 
 #? Full Method
-
 def grid_search_models(model_dict, X, y):
     """
     Performs grid search for hyperparameter optimization on multiple models.
@@ -169,9 +170,19 @@ def grid_search_models(model_dict, X, y):
         # Save the optimized parameters to a JSON file
         save_optimized_parameters(saved_params, model_name=model_name, score=best_score)
             
-    
-
 model_dict = {
+    "RDST"  : {
+        "default" : {"max_shapelets": 10000, "shapelet_length": None, "alpha_similarity": 0.5},
+        "max_shapelets": [100, 1000, 5000, 15000, 20000],  # Number of shapelets to extract
+        "shapelet_length": [2, 5, 8, 10, 20],  # Length of shapelets to extract
+        "alpha_similarity": [0.1, 0.3, 0.7, 0.9]  # Similarity threshold for shapelet matching
+    },
+    "Rocket" : {
+        "default" : ({"rocket": "Multi", "n_kernels": 512, "weights": None}),
+        "rocket": ["Multi", "Mini"],  # Multi or Mini
+        "n_kernels": [50, 128, 256, 1024, 2048],  # Number of kernels
+        "weights": [0.1, 0.3, 0.5, 0.7, 0.9]  # Percentage weight to assign to static variables
+    },
     "REDCOMETS": {
         "default" : {"perc_length": 5, "n_trees": 100},
         "perc_length": [0.1, 0.3, 0.7, 0.9, 1],
