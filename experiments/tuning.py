@@ -7,12 +7,16 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import f1_score
 
 #* Class imports for Methods
+import sys
+sys.path.insert(0, '/yunity/arusty/PF-GAP')
+
 from RFGAP_Rocket.RFGAP_Rocket import RFGAP_Rocket
 from RDST.rdst import RDST_GAP
 from QGAP.qgap import QGAP
 from Redcomets.Redcomets import REDCOMETS
 from FreshPrince.FreshPrince import FreshPRINCE_GAP
 
+print("Imports done.")
 
 def save_optimized_parameters(param_dict, model_name, score, save_path = "../data/opimized_models/"):
     """
@@ -178,15 +182,14 @@ model_dict = {
 #* Import data
 import sys 
 import pandas as pd
-sys.path.insert(0, '/yunity/arusty/PF-GAP')
 
-static2024 = pd.read_csv('../data/static2024.csv')
-static2023 = pd.read_csv('../data/static2023.csv')
-static2022 = pd.read_csv('../data/static2022.csv')
-static2025 = pd.read_csv('../data/static2025.csv')
-time_series = np.array(pd.read_csv('../data/time_series.csv'))
-labels = pd.read_csv('../data/labels.csv')
+static2024 = pd.read_csv('data/static2024.csv')
+static2023 = pd.read_csv('data/static2023.csv')
+static2022 = pd.read_csv('data/static2022.csv')
+static2025 = pd.read_csv('data/static2025.csv')
+time_series = np.array(pd.read_csv('data/time_series.csv'))
+labels = pd.read_csv('data/labels.csv')
 labels = np.array(labels).flatten()
 
 #* Run the grid search
-grid_search_models(model_dict, time_series, labels, static=static2024)
+grid_search_models(model_dict, time_series, labels)
