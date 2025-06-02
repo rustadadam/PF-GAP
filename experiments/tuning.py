@@ -14,7 +14,7 @@ from Redcomets.Redcomets import REDCOMETS
 from FreshPrince.FreshPrince import FreshPRINCE_GAP
 
 
-def save_optimized_parameters(param_dict, model_name, save_path = "../data/opimized_models/"):
+def save_optimized_parameters(param_dict, model_name, score, save_path = "../data/opimized_models/"):
     """
     Saves the optimized parameters for each model to a JSON file.
 
@@ -23,6 +23,8 @@ def save_optimized_parameters(param_dict, model_name, save_path = "../data/opimi
         save_path (str): Path to save the JSON file.
     """
     save_path = os.path.join(save_path, f"{model_name}_optimized_params.json")
+
+    param_dict["score"] = score  # Add the score to the parameters
 
     try:
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -108,7 +110,6 @@ def grid_search_models(model_dict, X, y, static=None):
     Returns:
         dict: Dictionary with optimized parameters for each model.
     """
-    optimized_params = {}
 
     for model_name, params_dict in model_dict.items():
         print(f"Optimizing parameters for {model_name}...")
@@ -148,9 +149,10 @@ def grid_search_models(model_dict, X, y, static=None):
                     saved_params = params
                     print(f"#!          -------> New best score. Parameters updated: {saved_params}")
             
-        # Save the best parameter for this model
-        optimized_params[model_name] = saved_params
-        
+
+        # Save the optimized parameters to a JSON file
+        save_optimized_parameters(saved_params, model_name=model_name, score=best_score)
+            
     
 
 model_dict = {
@@ -173,3 +175,5 @@ static2025 = pd.read_csv('../data/static2025.csv')
 time_series = np.array(pd.read_csv('../data/time_series.csv'))
 labels = pd.read_csv('../data/labels.csv')
 labels = np.array(labels).flatten()
+
+#* Run the grid search
