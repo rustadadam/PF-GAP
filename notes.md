@@ -157,7 +157,7 @@ The KNN results seem similar (or often smaller than) the RF test results, which 
 
 4. Added a plotting function for the k-fold results
 5. Sent the task of retreiving SHAP values to Kelvyn
-6. 
+6. Built a pipeline for getting the best hyperparameters. We have gotten them, and they really aren't all that much better. 
 
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 

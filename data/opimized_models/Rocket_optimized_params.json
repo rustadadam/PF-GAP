@@ -1,6 +1,6 @@
 {
     "rocket": "Multi",
-    "n_kernels": 512,
+    "n_kernels": 256,
     "weights": null,
-    "score": 0
+    "score": 0.453058448687498
 }

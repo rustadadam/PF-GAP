@@ -40,7 +40,7 @@ def save_optimized_parameters(param_dict, model_name, score, save_path = "data/o
 
 #? Methods to retrieve predictions and proximities for different models
 def get_rocket_pred(X_train, y_train, X_test, static_train, static_test, params):
-    rocket = RFGAP_Rocket(prediction_type = "Classification", # Classification or Regression
+    rocket = RFGAP_Rocket(prediction_type = "classification", # Classification or Regression
                            rocket = params["rocket"], # Rocket or MultiRocket
                          n_kernels=params["n_kernels"]) # 512 or other integers
     
@@ -50,7 +50,7 @@ def get_rocket_pred(X_train, y_train, X_test, static_train, static_test, params)
 def get_rdst_pred(X_train, y_train, X_test, static_train, static_test, params):
     rdst = RDST_GAP(save_transformed_data = True,
                     max_shapelets = params["max_shapelets"], # Any integer
-                    shapelet_length = params["shapelet_length"], #Any number, default is min(max(2,n_timepoints//2),11)
+                    shapelet_lengths = params["shapelet_length"], #Any number, default is min(max(2,n_timepoints//2),11)
                     alpha_similarity = params["alpha_similarity"]) # Betweeen 0 and 1
     
     rdst.fit(X_train, y_train, static = static_train)
@@ -171,15 +171,21 @@ def grid_search_models(model_dict, X, y):
         save_optimized_parameters(saved_params, model_name=model_name, score=best_score)
             
 model_dict = {
-    "FRESH" : {
-        "default" : {"default_fc_parameters": "comprehensive", "n_estimators": 200},
-        "default_fc_parameters": ["minimal", "efficient"],  # Type of feature extraction
-        "n_estimators": [50, 100, 500]  # Number of estimators in the rotation forest ensemble
-    },
-    "QGAP"  : {
-        "default" : {"interval_depth": 6, "quantile_divisor": 4},
-        "interval_depth": [2, 4, 5, 7, 8],  # Depth of the interval tree
-        "quantile_divisor": [1, 2, 3, 5, 6, 7, 8]  # Divisor for quantile calculation
+    # "FRESH" : {
+    #     "default" : {"default_fc_parameters": "comprehensive", "n_estimators": 200},
+    #     "default_fc_parameters": ["minimal", "efficient"],  # Type of feature extraction
+    #     "n_estimators": [50, 100, 500]  # Number of estimators in the rotation forest ensemble
+    # },
+    # "QGAP"  : {
+    #     "default" : {"interval_depth": 6, "quantile_divisor": 4},
+    #     "interval_depth": [2, 4, 5, 7, 8],  # Depth of the interval tree
+    #     "quantile_divisor": [1, 2, 3, 5, 6, 7, 8]  # Divisor for quantile calculation
+    # },
+    "Rocket" : {
+        "default" : ({"rocket": "Multi", "n_kernels": 512, "weights": None}),
+        "rocket": ["Multi", "Mini"],  # Multi or Mini
+        "n_kernels": [50, 128, 256, 1024, 2048],  # Number of kernels
+        "weights": [0.1, 0.3, 0.5, 0.7, 0.9]  # Percentage weight to assign to static variables
     },
     "RDST"  : {
         "default" : {"max_shapelets": 10000, "shapelet_length": None, "alpha_similarity": 0.5},
@@ -187,17 +193,12 @@ model_dict = {
         "shapelet_length": [2, 5, 8, 10, 20],  # Length of shapelets to extract
         "alpha_similarity": [0.1, 0.3, 0.7, 0.9]  # Similarity threshold for shapelet matching
     },
-    "Rocket" : {
-        "default" : ({"rocket": "Multi", "n_kernels": 512, "weights": None}),
-        "rocket": ["Multi", "Mini"],  # Multi or Mini
-        "n_kernels": [50, 128, 256, 1024, 2048],  # Number of kernels
-        "weights": [0.1, 0.3, 0.5, 0.7, 0.9]  # Percentage weight to assign to static variables
-    },
-    "REDCOMETS": {
-        "default" : {"perc_length": 5, "n_trees": 100},
-        "perc_length": [0.1, 0.3, 0.7, 0.9, 1],
-        "n_trees": [10, 50, 150, 200],
-    }
+    
+    # "REDCOMETS": {
+    #     "default" : {"perc_length": 5, "n_trees": 100},
+    #     "perc_length": [0.1, 0.3, 0.7, 0.9, 1],
+    #     "n_trees": [10, 50, 150, 200],
+    # }
 }
 
 #* Import data

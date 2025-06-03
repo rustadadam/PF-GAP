@@ -1,6 +1,6 @@
 {
     "max_shapelets": 10000,
     "shapelet_length": null,
-    "alpha_similarity": 0.5,
-    "score": 0
+    "alpha_similarity": 0.3,
+    "score": 0.535459268421731
 }
