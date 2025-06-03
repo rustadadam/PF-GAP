@@ -1,0 +1,5 @@
+{
+    "default_fc_parameters": "minimal",
+    "n_estimators": 200,
+    "score": 0.67669514627329
+}
