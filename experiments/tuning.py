@@ -6,7 +6,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import f1_score
 
-#* Class imports for Methods
+#& Class imports for Methods
 import sys
 sys.path.insert(0, '/yunity/arusty/PF-GAP')
 
@@ -115,7 +115,7 @@ def evaluate_params(get_predictions_method, params, X, y):
         print(f"Error evaluating parameters: {e}")
         return 0
 
-#? Full Method
+#& Full Method
 def grid_search_models(model_dict, X, y):
     """
     Performs grid search for hyperparameter optimization on multiple models.
@@ -201,7 +201,7 @@ model_dict = {
     # }
 }
 
-#* Import data
+#& Import data
 import sys 
 import pandas as pd
 
