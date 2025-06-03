@@ -171,6 +171,16 @@ def grid_search_models(model_dict, X, y):
         save_optimized_parameters(saved_params, model_name=model_name, score=best_score)
             
 model_dict = {
+    "FRESH" : {
+        "default" : {"default_fc_parameters": "comprehensive", "n_estimators": 200},
+        "default_fc_parameters": ["minimal", "efficient"],  # Type of feature extraction
+        "n_estimators": [50, 100, 500]  # Number of estimators in the rotation forest ensemble
+    },
+    "QGAP"  : {
+        "default" : {"interval_depth": 6, "quantile_divisor": 4},
+        "interval_depth": [2, 4, 5, 7, 8],  # Depth of the interval tree
+        "quantile_divisor": [1, 2, 3, 5, 6, 7, 8]  # Divisor for quantile calculation
+    },
     "RDST"  : {
         "default" : {"max_shapelets": 10000, "shapelet_length": None, "alpha_similarity": 0.5},
         "max_shapelets": [100, 1000, 5000, 15000, 20000],  # Number of shapelets to extract
