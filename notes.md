@@ -137,7 +137,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     d. NOTE: Don't use return values. We want to use the percent returns / z-scores
     e. We can linearly interpolate the missing values
 5. To investigate further -> we can visualize the the test points alongside the training points through our visualizations with PHATE and UMAP
-6. Train on all the data with optimized hyperparameters
 7. EXTRA TIME: how does this change with different ideas of creating proximities
     a. Can change the argument to "original" and "OOB" and proximity type. 
 
@@ -158,6 +157,9 @@ The KNN results seem similar (or often smaller than) the RF test results, which 
 4. Added a plotting function for the k-fold results
 5. Sent the task of retreiving SHAP values to Kelvyn
 6. Built a pipeline for getting the best hyperparameters. We have gotten them, and they really aren't all that much better. 
+7. Created the tuned proximities for each matrix
+    - Fresh Prince Looks the best, though RedComets has the highest f1 score
+8. 
 
 ## Possibilities to expand the project
 1. Using an imputation method to classify the NaNs and the following. 
