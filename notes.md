@@ -166,3 +166,8 @@ The KNN results seem similar (or often smaller than) the RF test results, which 
 
 From Ben:
 By the way, for DTW and Euclidean distances, you can get a classification accuracy like for the other models by using a 1-NN classifier. This is common in time series classification.
+
+# Week of Jun 4
+
+## Todo:
+1. 
