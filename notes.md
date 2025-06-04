@@ -143,7 +143,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 ## Changes and updates
 1. Tested the accuracy of the straight up distance measures. They seem to get better accuracy than the other models do. This is in test_accuracy file
 2. Created hourly returns with percent changes and included labels and removed missing values
-    a. Ran tests with Hourly scores. They are different that the yearly. Redcommets did a little better, and Rocket did a little worse.
+    a. Ran tests with Hourly scores. They are different that the daily. Redcommets did a little better, and Rocket did a little worse.
     b. It feels similar to having the different time_scopes
     c. Updated the visuals to demonstrate the hourly visuals as well
 3. Can get the test proximities now for the following functions
@@ -170,4 +170,11 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 # Week of Jun 4
 
 ## Todo:
-1. 
+1. Try to hourly points for a year (Use the same time-frame)
+    - Also test with the RF
+2. Look at the 11th label
+3. Hypertune the RF model
+4. What are the names of the sectors
+5. Check out a new distance measure
+ - Shape DTW
+ - Don't do any DTW any the hourly scale
