@@ -178,3 +178,9 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 5. Check out a new distance measure
  - Shape DTW
  - Don't do any DTW any the hourly scale
+
+ ## Completed Stuff
+ 1. Got the hourly points for a year 
+    - NOTE: I could not get it for the same time frame, as Yahoo finance deletes data older than 730 days. So instead I got the last full year of the same time frame. 
+    - Reran the proximities to get OOB scores and made as fair as comparisons as possible. The daily returns do seem to do better overall. See these results on the stock_data.ipynb file
+2. 
