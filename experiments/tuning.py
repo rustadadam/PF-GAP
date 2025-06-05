@@ -13,6 +13,8 @@ sys.path.insert(0, '/yunity/arusty/PF-GAP')
 from RFGAP_Rocket.RFGAP_Rocket import RFGAP_Rocket
 from RDST.rdst import RDST_GAP
 from QGAP.qgap import QGAP
+from rfgap import RFGAP
+
 from Redcomets.Redcomets import REDCOMETS
 from FreshPrince.FreshPrince import FreshPRINCE_GAP
 
@@ -79,6 +81,18 @@ def get_fresh_pred(X_train, y_train, X_test, static_train, static_test, params):
     fp.fit(X_train, y_train, static = static_train)
     return fp.predict(X_test, static = static_test)
     
+def get_rf_pred(X_train, y_train, X_test, static_train, static_test, params):
+    rfgap = RFGAP(prediction_type="classification", y = y_train,
+                  prox_method=params["prox_method"], # "original", "rfgap:, "oob""
+                  n_estimators=params["n_estimators"], # Number of estimators in the radnom forest
+                  ccp_alpha=params["ccp_alpha"], # Complexity parameter for pruning
+                  max_depth=params["max_depth"], # Maximum depth of the trees
+                  )
+    X_train = np.concat([X_train, static_train], axis=1)
+    X_test = np.concat([X_test, static_test], axis=1)
+    rfgap.fit(X_train, y_train)
+    return rfgap.predict(X_test)
+
 def determine_static(fold):
     if fold < 2:
         static_train = static2022
@@ -181,17 +195,24 @@ model_dict = {
     #     "interval_depth": [2, 4, 5, 7, 8],  # Depth of the interval tree
     #     "quantile_divisor": [1, 2, 3, 5, 6, 7, 8]  # Divisor for quantile calculation
     # },
-    "Rocket" : {
-        "default" : ({"rocket": "Multi", "n_kernels": 512, "weights": None}),
-        "rocket": ["Multi", "Mini"],  # Multi or Mini
-        "n_kernels": [50, 128, 256, 1024, 2048],  # Number of kernels
-        "weights": [0.1, 0.3, 0.5, 0.7, 0.9]  # Percentage weight to assign to static variables
-    },
-    "RDST"  : {
-        "default" : {"max_shapelets": 10000, "shapelet_length": None, "alpha_similarity": 0.5},
-        "max_shapelets": [100, 1000, 5000, 15000, 20000],  # Number of shapelets to extract
-        "shapelet_length": [2, 5, 8, 10, 20],  # Length of shapelets to extract
-        "alpha_similarity": [0.1, 0.3, 0.7, 0.9]  # Similarity threshold for shapelet matching
+    # "Rocket" : {
+    #     "default" : ({"rocket": "Multi", "n_kernels": 512, "weights": None}),
+    #     "rocket": ["Multi", "Mini"],  # Multi or Mini
+    #     "n_kernels": [50, 128, 256, 1024, 2048],  # Number of kernels
+    #     "weights": [0.1, 0.3, 0.5, 0.7, 0.9]  # Percentage weight to assign to static variables
+    # },
+    # "RDST"  : {
+    #     "default" : {"max_shapelets": 10000, "shapelet_length": None, "alpha_similarity": 0.5},
+    #     "max_shapelets": [100, 1000, 5000, 15000, 20000],  # Number of shapelets to extract
+    #     "shapelet_length": [2, 5, 8, 10, 20],  # Length of shapelets to extract
+    #     "alpha_similarity": [0.1, 0.3, 0.7, 0.9]  # Similarity threshold for shapelet matching
+    # },
+    "RF" : {
+        "default" : ({"ccp_alpha": 0.0, "max_depth": None, "n_estimators": 100, "prox_method": "rfgap"}),
+        "ccp_alpha": [0.1, 0.01, 0.001, 0.0001],  
+        "max_depth": [50, 100, 5, 10, 15],  
+        "n_estimators": [200, 250, 350],
+        "prox_method": ["original", "oob"]  # Proximity method to use
     },
     
     # "REDCOMETS": {
