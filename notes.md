@@ -186,3 +186,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 3. Kelvyns stuff
 4. Applied the Hourly points 
 5. Optimized the straight Random Forest
+
+## Black Rock asks
+1. Make an email of the scores of the CV
+2. 
