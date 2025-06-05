@@ -172,9 +172,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 ## Todo:
 1. Try to hourly points for a year (Use the same time-frame)
     - Also test with the RF
-2. Look at the 11th label
 3. Hypertune the RF model
-4. What are the names of the sectors
 5. Check out a new distance measure
  - Shape DTW
  - Don't do any DTW any the hourly scale
@@ -186,4 +184,4 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 2. Fixed the non-diagonal entries of the similarity matricies to be 1 on the prox-visuals file. 
  - Fixed the color scheme as well.
  - Coordinated the sectors
-3.
+3. Kelvyns stuff
