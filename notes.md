@@ -183,4 +183,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
  1. Got the hourly points for a year 
     - NOTE: I could not get it for the same time frame, as Yahoo finance deletes data older than 730 days. So instead I got the last full year of the same time frame. 
     - Reran the proximities to get OOB scores and made as fair as comparisons as possible. The daily returns do seem to do better overall. See these results on the stock_data.ipynb file
-2. 
+2. Fixed the non-diagonal entries of the similarity matricies to be 1 on the prox-visuals file. 
+ - Fixed the color scheme as well.
+ - Coordinated the sectors
+3.
