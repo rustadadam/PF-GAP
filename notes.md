@@ -173,6 +173,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 5. Check out a new distance measure
  - Shape DTW
  - Don't do any DTW any the hourly scale
+6. Save all the result files
 
  ## Completed Stuff
  1. Got the hourly points for a year 
@@ -185,3 +186,4 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 3. Kelvyns stuff
 4. Applied the Hourly points 
 5. Optimized the straight Random Forest
+6. Implemented shape_dtw

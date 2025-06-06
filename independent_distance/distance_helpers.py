@@ -3,6 +3,8 @@
 from tslearn.metrics import cdist_dtw, cdist_soft_dtw, cdist_soft_dtw_normalized
 from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances, cosine_distances
 import numpy as np
+from shapedtw.shapedtw import shape_dtw  # Correct import for shape_dtw
+from shapedtw.shapeDescriptors import SlopeDescriptor
 
 def return_correlation_distance(time_series_list):
     """
@@ -35,7 +37,7 @@ def compute_distance_matrix(time_series_list, metric="dtw"):
 
     Parameters:
         time_series_list (list): A list of time series data, where each time series is a 2D array.
-        metric (str): The distance metric to use. Options are "dtw", "soft_dtw", "soft_dtw_normalized",
+        metric (str): The distance metric to use. Options are "dtw", "shape_dtw", "soft_dtw", "soft_dtw_normalized",
                       "euclidean", "manhattan", "cosine", "return_correlation".
 
     Returns:
@@ -43,6 +45,26 @@ def compute_distance_matrix(time_series_list, metric="dtw"):
     """
     if metric == "dtw":
         return cdist_dtw(time_series_list)
+    elif metric == "shape_dtw":
+        n = len(time_series_list)
+        slope_descriptor = SlopeDescriptor(slope_window=7)
+
+        time_series_list = time_series_list.to_numpy() if hasattr(time_series_list, 'to_numpy') else time_series_list
+        distance_matrix = np.zeros((n, n))
+        for i in range(n):
+            for j in range(n):
+                if i == j:
+                    distance_matrix[i, j] = 0
+                else:
+                    # shape_dtw returns an object with .distance attribute
+                    result = shape_dtw(
+                        x=time_series_list[i],
+                        y=time_series_list[j],
+                        subsequence_width= 7 ,
+                        shape_descriptor=slope_descriptor
+                        )
+                    distance_matrix[i, j] = result.distance
+        return distance_matrix
     elif metric == "soft_dtw":
         return cdist_soft_dtw(time_series_list)
     elif metric == "soft_dtw_normalized":
@@ -56,4 +78,4 @@ def compute_distance_matrix(time_series_list, metric="dtw"):
     elif metric == "return_correlation":
         return return_correlation_distance(time_series_list)
     else:
-        raise ValueError("Unsupported metric. Choose from 'dtw', 'soft_dtw', 'soft_dtw_normalized', 'euclidean', 'manhattan', 'cosine', or 'return_correlation'.")
+        raise ValueError("Unsupported metric. Choose from 'dtw', 'shape_dtw', 'soft_dtw', 'soft_dtw_normalized', 'euclidean', 'manhattan', 'cosine', or 'return_correlation'.")

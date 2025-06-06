@@ -11,8 +11,10 @@ labels = pd.read_csv('data/labels.csv')
 time_series = pd.read_csv('data/time_series.csv')
 
 # Compute and save distance matrices for all available metrics
-metrics = ["dtw", "soft_dtw", "soft_dtw_normalized", 
-                      "euclidean", "manhattan", "cosine", "return_correlation"]
+metrics = ["shape_dtw"
+    #"dtw", "soft_dtw", "soft_dtw_normalized", 
+        #              "euclidean", "manhattan", "cosine", "return_correlation"
+        ]
 prox_dir = "/yunity/arusty/PF-GAP/experiments/prox_files"
 
 for metric in metrics:
