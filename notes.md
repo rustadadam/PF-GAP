@@ -1,7 +1,7 @@
 # Helpful Stuff
 
 Link to Resource Manager:
-https://statrm.byu.edu/frontend/build
+https://statrm.byu.edu/radial 
 
 # Week of April 3rd
 
@@ -129,17 +129,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 
 # Week of May 21st
 
-## Tasks
-3. Get data from YAHOO finance
-    a. We want to test at different time-scales
-    b. Start with Hourly -> Then we can go more fine-grained if we want
-    c. Then also go to weekly and monthly
-    d. NOTE: Don't use return values. We want to use the percent returns / z-scores
-    e. We can linearly interpolate the missing values
-5. To investigate further -> we can visualize the the test points alongside the training points through our visualizations with PHATE and UMAP
-7. EXTRA TIME: how does this change with different ideas of creating proximities
-    a. Can change the argument to "original" and "OOB" and proximity type. 
-
 ## Changes and updates
 1. Tested the accuracy of the straight up distance measures. They seem to get better accuracy than the other models do. This is in test_accuracy file
 2. Created hourly returns with percent changes and included labels and removed missing values
@@ -172,8 +161,12 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 ## Todo:
 5. Check out a new distance measure
  - Shape DTW
- - Don't do any DTW any the hourly scale
+ - Don't do any DTW any the hourly scale (takes a long time)
 6. Save all the result files
+
+7. EXTRA TIME: how does this change with different ideas of creating proximities
+    a. Can change the argument to "original" and "OOB" and proximity type. 
+
 
  ## Completed Stuff
  1. Got the hourly points for a year 

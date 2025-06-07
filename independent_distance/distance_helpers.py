@@ -52,6 +52,7 @@ def compute_distance_matrix(time_series_list, metric="dtw"):
         time_series_list = time_series_list.to_numpy() if hasattr(time_series_list, 'to_numpy') else time_series_list
         distance_matrix = np.zeros((n, n))
         for i in range(n):
+            print("")
             for j in range(n):
                 if i == j:
                     distance_matrix[i, j] = 0
@@ -60,10 +61,12 @@ def compute_distance_matrix(time_series_list, metric="dtw"):
                     result = shape_dtw(
                         x=time_series_list[i],
                         y=time_series_list[j],
-                        subsequence_width= 7 ,
+                        subsequence_width=7,
                         shape_descriptor=slope_descriptor
-                        )
+                    )
                     distance_matrix[i, j] = result.distance
+                print(f"{distance_matrix[i, j]:.1f}", end=" ", flush=True)  # <-- flush output
+            print()  # print newline after each row
         return distance_matrix
     elif metric == "soft_dtw":
         return cdist_soft_dtw(time_series_list)
