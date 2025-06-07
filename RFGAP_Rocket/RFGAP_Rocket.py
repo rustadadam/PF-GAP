@@ -8,7 +8,7 @@ class RFGAP_Rocket():
     Time series classification using RFGAP and Rocket.
     """
 
-    def __init__(self, prediction_type = True, rocket = "Multi", **kwargs):
+    def __init__(self, prediction_type = True, prox_method = "rfgap", rocket = "Multi", **kwargs):
         """Initialize the RFGAP Rocket Class.
 
         Parameters
@@ -32,7 +32,7 @@ class RFGAP_Rocket():
             raise ValueError("rocket must be 'Multi' or 'Mini'")
 
         #Initialize rfgap
-        self.rf_gap = RFGAP(prediction_type = prediction_type, oob_score = True)
+        self.rf_gap = RFGAP(prediction_type = prediction_type, prox_method = prox_method, oob_score = True)
 
         
     def fit(self, X, y, static=None, weights=None):
