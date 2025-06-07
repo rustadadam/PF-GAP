@@ -162,7 +162,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 5. Check out a new distance measure
  - Shape DTW
  - Don't do any DTW any the hourly scale (takes a long time)
-6. Save all the result files
 
 7. EXTRA TIME: how does this change with different ideas of creating proximities
     a. Can change the argument to "original" and "OOB" and proximity type. 
@@ -180,3 +179,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 4. Applied the Hourly points 
 5. Optimized the straight Random Forest
 6. Implemented shape_dtw
+7. Saved Results files
+8. 
