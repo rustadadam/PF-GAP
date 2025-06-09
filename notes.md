@@ -179,5 +179,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 4. Applied the Hourly points 
 5. Optimized the straight Random Forest
 6. Implemented shape_dtw
-7. Saved Results files
+7. Saved Results files for both original and RF gap proximity types
 8. 
