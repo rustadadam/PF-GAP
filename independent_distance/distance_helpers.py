@@ -52,7 +52,8 @@ def compute_distance_matrix(time_series_list, metric="dtw"):
         time_series_list = time_series_list.to_numpy() if hasattr(time_series_list, 'to_numpy') else time_series_list
         distance_matrix = np.zeros((n, n))
         for i in range(n):
-            print("")
+            print("Row", i + 1, "of", n, ":", flush=True) 
+            print("", flush= True) # <-- flush output
             for j in range(n):
                 if i == j:
                     distance_matrix[i, j] = 0

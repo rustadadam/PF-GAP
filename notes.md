@@ -162,6 +162,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 5. Check out a new distance measure
  - Shape DTW
  - Don't do any DTW any the hourly scale (takes a long time)
+ - Running this! (It was taking too long for some reason)
 
 7. EXTRA TIME: how does this change with different ideas of creating proximities
     a. Can change the argument to "original" and "OOB" and proximity type. 
@@ -180,4 +181,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 5. Optimized the straight Random Forest
 6. Implemented shape_dtw
 7. Saved Results files for both original and RF gap proximity types
+    - Also saved results for distances
+    - Created comparing_results.ipynb to visualize the results across different graphs. 
+    - 
 8. 

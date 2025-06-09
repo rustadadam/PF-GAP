@@ -15,7 +15,7 @@ metrics = ["shape_dtw"
     #"dtw", "soft_dtw", "soft_dtw_normalized", 
         #              "euclidean", "manhattan", "cosine", "return_correlation"
         ]
-prox_dir = "/yunity/arusty/PF-GAP/experiments/prox_files"
+prox_dir = "/yunity/arusty/PF-GAP/experiments/prox_files_daily"
 
 for metric in metrics:
     print(f"Computing {metric} distance matrix...")
