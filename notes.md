@@ -183,5 +183,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 7. Saved Results files for both original and RF gap proximity types
     - Also saved results for distances
     - Created comparing_results.ipynb to visualize the results across different graphs. 
-    - 
+    - It seems like the distance measures often outpreform the models -> this could be that a 1 knn model is just an easier estimation
 8. 
