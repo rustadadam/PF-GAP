@@ -164,10 +164,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
  - Don't do any DTW any the hourly scale (takes a long time)
  - Running this! (It was taking too long for some reason)
 
-7. EXTRA TIME: how does this change with different ideas of creating proximities
-    a. Can change the argument to "original" and "OOB" and proximity type. 
-
-
  ## Completed Stuff
  1. Got the hourly points for a year 
     - NOTE: I could not get it for the same time frame, as Yahoo finance deletes data older than 730 days. So instead I got the last full year of the same time frame. 
