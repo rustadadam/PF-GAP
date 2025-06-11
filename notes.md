@@ -190,5 +190,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 - https://www.cs.ucr.edu/~eamonn/time_series_data_2018/
 3. Make a google Collab with Sofia | Make a pipeline for handling the data
 - sofiamaia789@gmail.com | smaia13@byu.edu
-- 
-4. 
+
+## Completed
+1. 
