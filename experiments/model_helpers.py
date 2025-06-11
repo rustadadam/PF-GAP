@@ -1,6 +1,10 @@
 # Model Helpers file
 
 #& Imports
+import sys
+sys.path.insert(0, '/yunity/arusty/PF-GAP/')
+
+
 #Models
 from rfgap import RFGAP
 from RDST.rdst import RDST_GAP
