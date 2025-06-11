@@ -181,3 +181,14 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
     - Created comparing_results.ipynb to visualize the results across different graphs. 
     - It seems like the distance measures often outpreform the models -> this could be that a 1 knn model is just an easier estimation
 8. 
+
+# Week of Jun 11
+
+## TODO:
+1. Build a confusion matricies for the time (daily v Hourly)
+2. Rerun the algoritms across a benchmark data (try like the gunpoint dataset) - UCR 2018 archive for more datasets
+- https://www.cs.ucr.edu/~eamonn/time_series_data_2018/
+3. Make a google Collab with Sofia | Make a pipeline for handling the data
+- sofiamaia789@gmail.com | smaia13@byu.edu
+- 
+4. 
