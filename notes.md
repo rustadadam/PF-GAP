@@ -193,4 +193,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 
 ## Completed
 1. Created a way to keep the dates associated with the data
-2. 
+2. Generated the confusion matricies. Its clear here that the daily predictions are infact better than the hourly. 
+ - Its also interesting to see which class is often wrong. Financials seems to be the most easily mis-classified. 
+3. 
