@@ -33,7 +33,7 @@ def get_rfgap_pred(X_train, y_train, X_test, static_train, static_test, return_p
     if return_proximities:
         return rfgap.predict(train), rfgap.get_proximities().toarray(), rfgap.extend_prox(test).toarray()
     
-    return rfgap.predict(train)
+    return rfgap.predict(test)
 
 
 def get_rocket_pred(X_train, y_train, X_test, static_train, static_test, return_proximities=False, **rocket_params):
