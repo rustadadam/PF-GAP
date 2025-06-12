@@ -192,4 +192,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 - sofiamaia789@gmail.com | smaia13@byu.edu
 
 ## Completed
-1. 
+1. Created a way to keep the dates associated with the data
+2. 
