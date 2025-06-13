@@ -199,4 +199,5 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 2. Generated the confusion matricies. Its clear here that the daily predictions are infact better than the hourly. 
  - Its also interesting to see which class is often wrong. Financials seems to be the most easily mis-classified. 
  - For the distance matricies, I am realizing that I didn't preform the same train/ test split. Maybe this i why they are scoring higher as they seem to have more test data. 
-3. 
+3. Changed data to only use the 2024 and before. The OOB scores here as actually better this way
+4. 
