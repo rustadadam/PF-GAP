@@ -190,9 +190,13 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 - https://www.cs.ucr.edu/~eamonn/time_series_data_2018/
 3. Make a google Collab with Sofia | Make a pipeline for handling the data
 - sofiamaia789@gmail.com | smaia13@byu.edu
+4. Have a holdout year and generate new-proximities
+5. Use another dataset - maybe Russell - 3000 (GICS labels)
+    - MSCI? 
 
 ## Completed
 1. Created a way to keep the dates associated with the data
 2. Generated the confusion matricies. Its clear here that the daily predictions are infact better than the hourly. 
  - Its also interesting to see which class is often wrong. Financials seems to be the most easily mis-classified. 
+ - For the distance matricies, I am realizing that I didn't preform the same train/ test split. Maybe this i why they are scoring higher as they seem to have more test data. 
 3. 
