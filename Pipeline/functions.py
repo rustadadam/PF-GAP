@@ -1,13 +1,13 @@
 import numpy as np
 
 #Function to convert data to proximities
-def data_to_proximities(model, Xtrain, ytrain, Xtest = None, Xstatic_train = None, Xstatic_test = None):
+def data_to_proximities(model, data, labels, static = None):
 
     #Fit model
-    model = fit_model(model, Xtrain, ytrain, Xstatic_train)
+    model = fit_model(model, data, labels, static)
     
     #Get proximities
-    proximites = get_proximities(model, Xtrain) # Does this need test data instead: Xtest, Xstatic_test?
+    proximites = get_proximities(model, data) # Does this need test data instead: Xtest, Xstatic_test?
 
     return np.array(proximites)
 
