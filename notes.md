@@ -185,7 +185,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 # Week of Jun 11
 
 ## TODO:
-1. Build a confusion matricies for the time (daily v Hourly)
 2. Rerun the algoritms across a benchmark data (try like the gunpoint dataset) - UCR 2018 archive for more datasets
 - https://www.cs.ucr.edu/~eamonn/time_series_data_2018/
 3. Make a google Collab with Sofia | Make a pipeline for handling the data
@@ -199,6 +198,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 2. Generated the confusion matricies. Its clear here that the daily predictions are infact better than the hourly. 
  - Its also interesting to see which class is often wrong. Financials seems to be the most easily mis-classified. 
  - For the distance matricies, I am realizing that I didn't preform the same train/ test split. Maybe this i why they are scoring higher as they seem to have more test data. 
-3. Changed data to only use the 2024 and before. The OOB scores here as actually better this way (for the most part)
+3. Changed data to only use the 2024 and before. The OOB scores here as actually better this way (for the most part). This thereby is using the holdout year
 - Also saved the rf-prox matrix
-4. Ran testing results and made necessary changes to get cross validated results
+4. Ran testing results and made necessary changes to get cross validated results for the holdout year
+- Some notes -> The Cross validation set was on the same year as the training data (I never tested on he 2024 data or used the 2024 static data ever). This is because we would need equal length time-series to make the classification. 
