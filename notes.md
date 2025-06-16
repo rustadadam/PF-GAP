@@ -185,12 +185,7 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 # Week of Jun 11
 
 ## TODO:
-2. Rerun the algoritms across a benchmark data (try like the gunpoint dataset) - UCR 2018 archive for more datasets
-- https://www.cs.ucr.edu/~eamonn/time_series_data_2018/
-3. Make a google Collab with Sofia | Make a pipeline for handling the data
-- sofiamaia789@gmail.com | smaia13@byu.edu
-4. Have a holdout year and generate new-proximities
-5. Use another dataset - maybe Russell - 3000 (GICS labels)
+5. (WAIT until word) Use another dataset - maybe Russell - 3000 (GICS labels)
     - MSCI? 
 
 ## Completed
@@ -202,3 +197,6 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 - Also saved the rf-prox matrix
 4. Ran testing results and made necessary changes to get cross validated results for the holdout year
 - Some notes -> The Cross validation set was on the same year as the training data (I never tested on he 2024 data or used the 2024 static data ever). This is because we would need equal length time-series to make the classification. 
+5. Made a google Collab with Sofia | Make a pipeline for handling the data
+- sofiamaia789@gmail.com | smaia13@byu.edu
+6. The algorithms clearly do better against benchmark data like the gunpoint data. 
