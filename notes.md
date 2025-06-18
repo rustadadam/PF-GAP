@@ -185,8 +185,8 @@ By the way, for DTW and Euclidean distances, you can get a classification accura
 # Week of Jun 11
 
 ## TODO:
-5. (WAIT until word) Use another dataset - maybe Russell - 3000 (GICS labels)
-    - MSCI? 
+5. Implement new dataset
+6. 
 
 ## Completed
 1. Created a way to keep the dates associated with the data
