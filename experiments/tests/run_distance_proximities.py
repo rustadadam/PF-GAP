@@ -7,15 +7,17 @@ import numpy as np
 from independent_distance.distance_helpers import compute_distance_matrix
 
 #Build data
-labels = pd.read_csv('data/labels.csv')
-time_series = pd.read_csv('data/time_series.csv')
+labels = np.array(pd.read_csv("/yunity/arusty/PF-GAP/data/ftse_100_sectors.csv")).flatten()
+time_series = pd.read_csv("/yunity/arusty/PF-GAP/data/ftse_100_close_prices.csv", index_col=0)
+prox_dir = "/yunity/arusty/PF-GAP/data/ftse_100/results"
+
 
 # Compute and save distance matrices for all available metrics
-metrics = [#"shape_dtw"
-    "dtw", "soft_dtw", "soft_dtw_normalized", 
-                     "euclidean", "manhattan", "cosine", "return_correlation"
+metrics = [
+        "dtw", "soft_dtw", "soft_dtw_normalized", 
+        "euclidean", "manhattan", "cosine", "return_correlation",
+        "shape_dtw"
         ]
-prox_dir = "/yunity/arusty/PF-GAP/data/prox_files_daily"
 
 for metric in metrics:
     print(f"Computing {metric} distance matrix...")
