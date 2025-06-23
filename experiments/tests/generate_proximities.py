@@ -30,9 +30,9 @@ from rfgap import RFGAP
 
 #& Data Loading
 time_series = pd.read_csv("/yunity/arusty/PF-GAP/data/russell3000.csv", index_col=0)
-static =  None
+static =  pd.read_csv("/yunity/arusty/PF-GAP/data/russell3000_static.csv", index_col=0)
 labels = np.array(pd.read_csv("/yunity/arusty/PF-GAP/data/russell3000_gics_sectors.csv", index_col=0)).flatten()
-data_dir = "../../data/russel/results/no_static/"
+data_dir = "/yunity/arusty/PF-GAP/data/russel/results/static/"
 
 
 # In[2]:
@@ -80,7 +80,7 @@ print("Beggining Redcomets...")
 if static is None:
     redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100) 
 else:
-    redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100, static_data=static)
+    redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100, static=static)
 redcomets_prox = data_to_proximities(redcomets, time_series, labels)
 np.save(os.path.join(data_dir, "redcomets_prox.npy"), redcomets_prox)
 print("---- Redcomets Finished")
