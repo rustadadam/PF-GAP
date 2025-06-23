@@ -1220,7 +1220,6 @@ INFA,Technology
 INGM,Technology
 INGN,Healthcare
 INGR,Consumer Defensive
-INH,
 INMD,Healthcare
 INN,Real Estate
 INO,Healthcare
@@ -1399,7 +1398,6 @@ LIN,Basic Materials
 LINC,Consumer Defensive
 LIND,Consumer Cyclical
 LINE,Real Estate
-LION,
 LITE,Technology
 LIVN,Healthcare
 LKFN,Financial Services
@@ -2386,7 +2384,6 @@ TXRH,Consumer Cyclical
 TXT,Industrials
 TYL,Technology
 TYRA,Healthcare
-True,
 U,Technology
 UA,Consumer Cyclical
 UAA,Consumer Cyclical
@@ -2430,7 +2427,6 @@ URG,Energy
 URGN,Healthcare
 URI,Industrials
 USB,Financial Services
-USD,
 USFD,Consumer Defensive
 USLM,Basic Materials
 USNA,Consumer Defensive
@@ -2546,7 +2542,6 @@ WKC,Energy
 WLDN,Industrials
 WLFC,Industrials
 WLK,Basic Materials
-WLLBW,
 WLY,Communication Services
 WM,Industrials
 WMB,Energy
