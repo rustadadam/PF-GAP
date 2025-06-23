@@ -4,7 +4,7 @@
 # # This file is to generate the proximity matricies; Data Agnostic
 # - Helpful to just change a few lines of code where to import the data from. 
 
-# In[1]:
+# In[ ]:
 
 
 # Load up data
@@ -29,6 +29,7 @@ from rfgap import RFGAP
 
 
 #& Data Loading
+#* Note: The data directory will have to be changed here to a direct path based on your system.
 time_series = pd.read_csv("/yunity/arusty/PF-GAP/data/russell3000.csv", index_col=0)
 static =  None
 labels = np.array(pd.read_csv("/yunity/arusty/PF-GAP/data/russell3000_gics_sectors.csv", index_col=0)).flatten()
@@ -38,81 +39,87 @@ data_dir = "../../data/russel/results/no_static/"
 # In[2]:
 
 
-# time_series.shape, labels.shape, static.shape if static is not None else "No static data"
+time_series.shape, labels.shape, static.shape if static is not None else "No static data"
 
 
-# # In[3]:
+# In[3]:
 
 
-# print("NaNs in time_series:", time_series.isnull().values.any())
-# print("NaNs in labels:", pd.isnull(labels).any())
-# print("NaNs in static:", static is not None and pd.isnull(static).any())
+print("NaNs in time_series:", time_series.isnull().values.any())
+print("NaNs in labels:", pd.isnull(labels).any())
+print("NaNs in static:", static is not None and pd.isnull(static).any())
 
 
-# # # Generating the proximities
+# # Generating the proximities
 
-# # In[4]:
-
-
-# print("Beginning RF-GAP...")
-# rfgap = RFGAP(prediction_type="classification", y = labels, oob_score = True)
-# rfgap.fit(time_series, labels)
-# np.save(os.path.join(data_dir, "rfgap.npy"), rfgap.get_proximities().todense())
-# print("---- RF-GAP complete ")
-# print("---- RF-GAP OOB score: ", rfgap.oob_score_)
+# In[ ]:
 
 
-# # In[5]:
+print("Beginning RF-GAP...")
+
+if static is not None:
+    train = np.concatenate([time_series, static], axis=1)
+else:
+    train = time_series
+
+rfgap = RFGAP(prediction_type="classification", y = labels, oob_score = True)
+rfgap.fit(train, labels)
+np.save(os.path.join(data_dir, "rfgap.npy"), rfgap.get_proximities().todense())
+print("---- RF-GAP complete ")
+print("---- RF-GAP OOB score: ", rfgap.oob_score_)
 
 
-# print("Beggining QGAP...")
-# qgap = QGAP(matrix_type="dense", interval_depth = 8, quantile_divisor = 8)
-# quant_prox = data_to_proximities(qgap, time_series, labels, static)
-# np.save(os.path.join(data_dir, "quant_prox.npy"), quant_prox)
-# print("---- QGAP Finished")
-# print("---- OOB Score: ", qgap._estimator.oob_score_)
+# In[5]:
 
 
-# # In[6]:
+print("Beggining QGAP...")
+qgap = QGAP(matrix_type="dense", interval_depth = 8, quantile_divisor = 8)
+quant_prox = data_to_proximities(qgap, time_series, labels, static)
+np.save(os.path.join(data_dir, "quant_prox.npy"), quant_prox)
+print("---- QGAP Finished")
+print("---- OOB Score: ", qgap._estimator.oob_score_)
 
 
-# print("Beggining Redcomets...")
-# if static is None:
-#     redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100) 
-# else:
-#     redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100, static=static)
-# redcomets_prox = data_to_proximities(redcomets, time_series, labels)
-# np.save(os.path.join(data_dir, "redcomets_prox.npy"), redcomets_prox)
-# print("---- Redcomets Finished")
-# print("---- OOB Score: ", redcomets.get_ensemble_oob_score())
+# In[ ]:
 
 
-# # In[7]:
+print("Beggining Redcomets...")
+if static is None:
+    redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100) 
+else:
+    redcomets = REDCOMETS(variant = 3, perc_length = 0.7, n_trees = 100, static=static)
+redcomets_prox = data_to_proximities(redcomets, time_series, labels)
+np.save(os.path.join(data_dir, "redcomets_prox.npy"), redcomets_prox)
+print("---- Redcomets Finished")
+print("---- OOB Score: ", redcomets.get_ensemble_oob_score())
 
 
-# print("Beggining RFGAP-Rockets...")
-# rf_rocket = RFGAP_Rocket(prediction_type = "classification", rocket = "Multi",
-#                          n_kernels=256) # Rocket Kwargs
-# rocket_prox = data_to_proximities(rf_rocket, time_series, labels, static)
-# np.save(os.path.join(data_dir, "rocket_prox.npy"), rocket_prox)
-# print("---- RFGAP-Rockets Finished")
-# print("---- OOB Score: ", rf_rocket.rf_gap.oob_score_)
+# In[7]:
 
 
-# # In[8]:
+print("Beggining RFGAP-Rockets...")
+rf_rocket = RFGAP_Rocket(prediction_type = "classification", rocket = "Multi",
+                         n_kernels=256) # Rocket Kwargs
+rocket_prox = data_to_proximities(rf_rocket, time_series, labels, static)
+np.save(os.path.join(data_dir, "rocket_prox.npy"), rocket_prox)
+print("---- RFGAP-Rockets Finished")
+print("---- OOB Score: ", rf_rocket.rf_gap.oob_score_)
 
 
-# print("Beggining RDST...")
-# rdst = RDST_GAP(save_transformed_data = True, max_shapelets = 10000, 
-#                 shapelet_lengths = None, alpha_similarity = 0.3)
-# rdst_prox = data_to_proximities(rdst, time_series, labels, static)
-
-# np.save(os.path.join(data_dir, "rdst_prox.npy"), rdst_prox)
-# print("---- RDST Finished")
-# print("---- OOB Score: ", rdst._estimator.oob_score_)
+# In[8]:
 
 
-# # In[ ]:
+print("Beggining RDST...")
+rdst = RDST_GAP(save_transformed_data = True, max_shapelets = 10000, 
+                shapelet_lengths = None, alpha_similarity = 0.3)
+rdst_prox = data_to_proximities(rdst, time_series, labels, static)
+
+np.save(os.path.join(data_dir, "rdst_prox.npy"), rdst_prox)
+print("---- RDST Finished")
+print("---- OOB Score: ", rdst._estimator.oob_score_)
+
+
+# In[9]:
 
 
 print("Beggining Fresh Prince...")
@@ -159,12 +166,6 @@ print("---- OOB Score: Not available for PyF-GAP")
 # In[ ]:
 
 
-time_series.to_numpy()
-
-
-# In[ ]:
-
-
 # Begin the Train test split stuff
 
 #& Imports
@@ -184,6 +185,9 @@ from sklearn.model_selection import train_test_split
 #//                                                         time_series, labels, 
 #//                                                         test_size=0.2, random_state=42
 #//                                                         )
+
+#* Convert the static data
+static = static.to_numpy() if isinstance(static, pd.DataFrame) else static
 
 
 
@@ -322,8 +326,33 @@ def get_fresh_pred(X_train, y_train, X_test, static_train, static_test):
     fp.fit(X_train, y_train, static = static_train)
     return fp.predict(X_test, static = static_test), np.array(fp.get_proximities().todense()), np.array(fp.get_extend(X_test, static_test).todense())
 
+def get_rf_pred(X_train, y_train, X_test, static_train, static_test):
+    if static_train is not None:
+        train = np.concatenate([X_train, static_train], axis=1)
+    else:
+        train = X_train
+    rfgap = RFGAP(prediction_type="classification", oob_score=True, prox_method = "rfgap")
+    rfgap.fit(train, y_train)
 
-# In[ ]:
+    if static_test is not None:
+        X_test = np.concatenate([X_test, static_test], axis=1)
+    else:
+        X_test = X_test
+
+    return rfgap.predict(X_test), np.array(rfgap.get_proximities().todense()), np.array(rfgap.prox_extend(X_test).todense())
+
+
+# In[16]:
+
+
+print("Running RF-GAP Cross-Validation...")
+rf_results = get_cross_validation_results(get_rf_pred)
+rf_results.to_csv(os.path.join(data_dir, "rfgap_scores.csv"), index=False)
+print("----- RF-GAP Cross-Validation complete")
+plot_cv_results(rf_results)
+
+
+# In[6]:
 
 
 print("Beggining Rocket Cross Validation Tests...")
