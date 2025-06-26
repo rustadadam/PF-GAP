@@ -1,101 +1,101 @@
-Sector
-Telecommunications services
-Retailers
-Industrial Support services
-Health care equipment & supplies
-Media
-Financial services
-Financial services
-Pharmaceuticals & biotechnology
-Support services
-Real estate investment trusts
-Containers & packaging
-Insurance
-Household goods & home construction
-Media
-Support services
-Food & tobacco
-Pharmaceuticals & biotechnology
-Travel & leisure
-Telecommunications services
-Mining
-Collective investments
-Banks
-General industrials
-Industrial goods and services
-Multiline utilities
-Beverages
-Industrial engineering
-Leisure Goods
-Travel & leisure
-Banks
-Life insurance
-Media
-Media
-Chemicals
-General retailers
-Mining
-Household goods & home construction
-Precious Metals and Mining
-Household goods & home construction
-Mining
-Support services
-Food & drug retailing
-Real Estate Investment Trusts
-Financial services
-Insurance
-Media
-Real estate investment trusts
-Support services
-Life insurance
-Beverages
-Banks
-Support services
-General retailers
-Pharmaceuticals & biotechnology
-Investment Trusts
-Software & computer services
-Oil & gas producers
-Aerospace & defence
-Travel & leisure
-Food & drug retailing
-Multiline utilities
-Travel & leisure
-Food & drug retailing
-Life insurance
-Mining
-Support services
-Electrical utilities & independent power producers
-Banks
-Life insurance
-Financial services
-Real estate investment trusts
-Investment trusts
-Oil & gas producers
-Financial services
-Homebuilding & construction supplies
-Personal goods
-Collective investments
-Mobile telecommunications
-Media
-Financial services
-Multiline utilities
-Pharmaceuticals & biotechnology
-Mining
-Household goods & home construction
-Support services
-Beverages
-Electronic equipment & parts
-Household goods & home construction
-Health care equipment & supplies
-Aerospace & defence
-Financial services
-Non-life Insurance
-Tobacco
-Aerospace & defence
-Banks
-Retail hospitality
-Multiline utilities
-Aerospace & defence
-"Machinery, tools, heavy vehicles, trains & ships"
-Tobacco
+Ticker,Sector
+AAF,Telecommunications services
+KGF,Retailers
+DPLM,Industrial Support services
+SN,Health care equipment & supplies
+PSON,Media
+ICG,Financial services
+SDR,Financial services
+AZN,Pharmaceuticals & biotechnology
+BNZL,Support services
+SGRO,Real estate investment trusts
+MNDI,Containers & packaging
+BEZ,Insurance
+TW,Household goods & home construction
+INF,Media
+EXPN,Support services
+ABF,Food & tobacco
+GSK,Pharmaceuticals & biotechnology
+IHG,Travel & leisure
+BT-A,Telecommunications services
+ANTO,Mining
+SMT,Collective investments
+STAN,Banks
+SMIN,General industrials
+WEIR,Industrial goods and services
+CNA,Multiline utilities
+CCH,Beverages
+SPX,Industrial engineering
+GAW,Leisure Goods
+ENT,Travel & leisure
+LLOY,Banks
+PRU,Life insurance
+REL,Media
+RMV,Media
+CRDA,Chemicals
+NXT,General retailers
+RIO,Mining
+PSN,Household goods & home construction
+EDV,Precious Metals and Mining
+RKT,Household goods & home construction
+GLEN,Mining
+AHT,Support services
+SBRY,Food & drug retailing
+LMP,Real Estate Investment Trusts
+MNG,Financial services
+ADM,Insurance
+AUTO,Media
+LAND,Real estate investment trusts
+ITRK,Support services
+AV,Life insurance
+DGE,Beverages
+NWG,Banks
+RTO,Support services
+JD,General retailers
+HIK,Pharmaceuticals & biotechnology
+ALW,Investment Trusts
+SGE,Software & computer services
+BP,Oil & gas producers
+MRO,Aerospace & defence
+IAG,Travel & leisure
+MKS,Food & drug retailing
+NG,Multiline utilities
+EZJ,Travel & leisure
+TSCO,Food & drug retailing
+LGEN,Life insurance
+FRES,Mining
+DCC,Support services
+SSE,Electrical utilities & independent power producers
+HSBA,Banks
+PHNX,Life insurance
+STJ,Financial services
+UTG,Real estate investment trusts
+PCT,Investment trusts
+SHEL,Oil & gas producers
+LSEG,Financial services
+HWDN,Homebuilding & construction supplies
+ULVR,Personal goods
+FCIT,Collective investments
+VOD,Mobile telecommunications
+WPP,Media
+III,Financial services
+UU,Multiline utilities
+HLN,Pharmaceuticals & biotechnology
+AAL,Mining
+BTRW,Household goods & home construction
+CPG,Support services
+CCEP,Beverages
+HLMA,Electronic equipment & parts
+BKG,Household goods & home construction
+CTEC,Health care equipment & supplies
+BA,Aerospace & defence
+PSH,Financial services
+HSX,Non-life Insurance
+BATS,Tobacco
+RR,Aerospace & defence
+BARC,Banks
+WTB,Retail hospitality
+SVT,Multiline utilities
+BAB,Aerospace & defence
+IMI,"Machinery, tools, heavy vehicles, trains & ships"
+IMB,Tobacco
