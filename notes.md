@@ -3,6 +3,9 @@
 Link to Resource Manager:
 https://statrm.byu.edu/radial 
 
+#Model Spreadsheet
+https://docs.google.com/spreadsheets/d/1h0BBgRL-IzkJKwZYiBjJfESYnEBhiJoYlBrqSk4YXPg/edit?gid=0#gid=0 
+
 # Week of April 3rd
 
 ## Changes and Updates
